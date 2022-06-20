@@ -58,9 +58,9 @@
  *  Sword / 3
  *    Find 1 gold
  *  Skull / 2
- *    Lose 1 health
+ *    Set back 1 space
  *  Sword & Skull / 1
- *    Find 1 gold and lose 1 health
+ *    Find 1 gold and set back 1 space
  */
 
 /* Potions
@@ -77,6 +77,7 @@
  */
 
 /* Heroes / Skills
+ *  Add later
  *  Barbarian
  *    Melee: defeat all adjacent monsters + move 1 space
  *  Wizard
@@ -90,11 +91,11 @@
 /* Enemies
  *  Randomly generate names and bios for higher levels
  *  Level 1
- *    1 Strength
+ *    1 Strength, default name
  *  Level 2
- *    2 Strength
+ *    2 Strength, random name
  *  Level 3
- *    3 Strength
+ *    3 Strength, random name and description
  */
 
 /* Weapons - cost 3, sell back for 2
