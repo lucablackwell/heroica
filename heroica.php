@@ -5,19 +5,23 @@
  *  Randomize chests, potions, enemies (entities)
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
  *  Display progress with entities
- *    [----|--*-E---p---#----]
+ *    [----|--*-1---p---#----]
  *      * - chest
  *      | - door
+ *      ! - puzzle door
  *      # - branching door
  *      p - potion
- *      E - enemy
+ *      1 - low level enemy
+ *      2 - mid level enemy
+ *      3 - mid level enemy
  *  No point in doors with keys because linear
  *    Doors with puzzles instead
  *      Guess the number / mastermind
- *  Generate different paths - one with more enemies and fewer puzzles?
- *    [----|--*-E---p---#----]
- *                      [-E----*---|-]
- *                      [-E-E--*-p-|-]
+ *  Generate different paths - one with more enemies and fewer puzzles / higher level enemies for higher reward
+ *    [----|--*-1---p---#----]
+ *                      [-3----*---!-] one high level enemy for okay reward
+ *                      [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
+ *                      [-!-!--*---!-] two puzzles for okay reward - no combat
  *  Shop between levels? - save stats to file
  */
 
@@ -48,6 +52,7 @@
  */
 
 /* Chests
+ *  Remove health detraction - only reward
  *  Shield
  *    Find 2 gold
  *  Sword / 3
@@ -82,12 +87,13 @@
  *    Ranged: move up to 2 spaces and defeat an adjacent monster
  */
 
-/* Monsters
- *  Goblin Warrior
+/* Enemies
+ *  Randomly generate names and bios for higher levels
+ *  Level 1
  *    1 Strength
- *  Goblin Guardian
+ *  Level 2
  *    2 Strength
- *  Goblin King
+ *  Level 3
  *    3 Strength
  */
 
