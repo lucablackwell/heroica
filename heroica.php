@@ -28,7 +28,7 @@
  */
 
 function path_gen($path_length) {
-    // 1 in 2 chance of space
+    // 1 in 2 chance of space 16
     // 1 in 4 chance of level 1
     // 1 in 8 chance of level 2
     // 1 in 8 chance of door
@@ -38,7 +38,7 @@ function path_gen($path_length) {
         '2', '2',
         '|'
     ];
-
+    echo count($entities);
     $path = [];
     for ($i = 0; count($path) < $path_length;) {
         $entity = $entities[array_rand($entities)];
