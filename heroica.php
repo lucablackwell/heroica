@@ -5,15 +5,20 @@
  *  Randomize chests, potions, enemies (entities)
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
  *  Display progress with entities
- *    [----|--*-E---p---E----]
+ *    [----|--*-E---p---#----]
  *      * - chest
  *      | - door
+ *      # - branching door
  *      p - potion
  *      E - enemy
  *  No point in doors with keys because linear
  *    Doors with puzzles instead
  *      Guess the number / mastermind
  *  Generate different paths - one with more enemies and fewer puzzles?
+ *    [----|--*-E---p---#----]
+ *                      [-E----*---|-]
+ *                      [-E-E--*-p-|-]
+ *  Shop between levels? - save stats to file
  */
 
 /* Dice Movement
