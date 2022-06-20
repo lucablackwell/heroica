@@ -1,6 +1,6 @@
 <?php
 
-/* Progress
+/** Progress
  *  Linear progress - option for length
  *  Randomize chests, potions, enemies (entities)
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
@@ -14,19 +14,69 @@
  *      1 - low level enemy
  *      2 - mid level enemy
  *      3 - mid level enemy
- *  No point in doors with keys because linear
- *    Doors with puzzles instead
- *      Guess the number / mastermind
- *  Generate different paths - one with more enemies and fewer puzzles / higher level enemies for higher reward
- *    [----|--*-1---p---#----]
- *                      [-3----*---!-] one high level enemy for okay reward
- *                      [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
- *                      [-!-!--*---!-] two puzzles for okay reward - no combat
  *  Shop between levels? - save stats to file
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
 
-/* Dice Movement
+/** How to Generate
+ *  10 spaces for now
+ *  blank space between
+ *  generate entities (chance per one)
+ *    add space after entity
+ *  only level 1 and 2 enemies and regular doors for now
+ *  iterate over length of array
+ *
+ *  could do it so that a string of dashes is created, then iterated over
+ *    find which positions have dashes, replace
+ *
+ *  or just do custom designed paths?
+ */
+
+function path_gen($path_length, $entities) {
+    $path = [];
+    for ($i = 0; count($path) < $path_length + 5;) {
+        $entity = $entities[array_rand($entities)];
+        if ($entity != '-') {
+            $path[] = $entity;
+            $path[] = '-';
+        }
+        $path[] = '-';
+    }
+    return explode(' ', substr(implode($path, ' '), 0, $path_length * 2));
+}
+
+function path_view($path) {
+    echo '[';
+    foreach ($path as $space) {
+        echo $space;
+    }
+    echo "]\n";
+}
+
+// 2 in 3 chance of space
+// 1 in 6 chance of level 1
+// 1 in 12 chance of level 2
+// 1 in 24 chance of door
+$entities = [
+    '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+    '1', '1', '1', '1',
+    '2', '2',
+    '|'
+];
+
+$path = path_gen(9, $entities); // one less than desired length
+#var_dump($path);
+
+path_view($path);
+
+/** How to Render
+ *  track player position
+ *  track entities
+ *  loop for each space, interrupt for entity
+ *  choose to move (add ranged and potions later)
+ */
+
+/** Dice Movement
  *  6 sides
  *  Pick up potions and carry on
  *  Stop for enemies and chests
@@ -40,7 +90,7 @@
  *    Move 1 spaces
  */
 
-/* Dice Fighting
+/** Dice Fighting
  *  6 sides
  *  Shield
  *    Defeat / use Melee skill
@@ -52,7 +102,20 @@
  *    Defeat and lose health equal to strength + (move back one space)
  */
 
-/* Chests
+/** Doors
+ *  Regular door
+ *    Pass through as normal, provide description
+ *  Puzzle door
+ *    Present player with number guess or mastermind game (depending on difficulty)
+ *  Branching door
+ *    Generate new paths, some with more enemies and rewards, others with more puzzles
+ *      [----|--*-1---p---#----]
+ *                        [-3----*---!-] one high level enemy for okay reward
+ *                        [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
+ *                        [-!-!--*---!-] two puzzles for okay reward - no combat
+ */
+
+/** Chests
  *  Remove health detraction - only reward
  *  Shield
  *    Find 2 gold
@@ -64,7 +127,8 @@
  *    Find 1 gold and set back 1 space
  */
 
-/* Potions
+/** Potions
+ *  Add later
  *  Usable at any time
  *  Each only usable once
  *  Life
@@ -77,7 +141,7 @@
  *    Defeat an adjacent monster
  */
 
-/* Heroes / Skills
+/** Heroes / Skills
  *  Add later
  *  Barbarian
  *    Melee: defeat all adjacent monsters + move 1 space
@@ -89,7 +153,7 @@
  *    Ranged: move up to 2 spaces and defeat an adjacent monster
  */
 
-/* Enemies
+/** Enemies
  *  Randomly generate names and bios for higher levels
  *  Level 1
  *    1 Strength, default name
@@ -99,7 +163,7 @@
  *    3 Strength, random name and description
  */
 
-/* Weapons - cost 3, sell back for 2
+/** Weapons - cost 3, sell back for 2
  *  Add later
  *  Axe
  *    Melee: defeat all adjacent monsters
