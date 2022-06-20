@@ -39,7 +39,8 @@ function path_gen($path_length) {
         '|'
     ];
     $path = [];
-    for ($i = 0; count($path) < $path_length;) {
+    for ($i = 0; count($path) < $path_length + 5;) {
+        // why not just trim to be path length?
         $entity = $entities[array_rand($entities)];
         if ($entity != '-') {
             $path[] = $entity;
@@ -47,7 +48,7 @@ function path_gen($path_length) {
         }
         $path[] = '-';
     }
-    return $path;
+    return explode(' ', substr(implode($path, ' '), 0, $path_length * 2));
 }
 function path_view($path) {
     echo '[';
@@ -57,7 +58,7 @@ function path_view($path) {
     echo "]\n" . count($path) . "\n";
 }
 
-$path = path_gen(10);
+$path = path_gen(9); // one less than desired length
 #var_dump($path);
 
 path_view($path);
