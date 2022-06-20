@@ -1,6 +1,6 @@
 <?php
 
-/* Progress
+/** Progress
  *  Linear progress - option for length
  *  Randomize chests, potions, enemies (entities)
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
@@ -18,13 +18,18 @@
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
 
-/* How to Generate
+/** How to Generate
  *  10 spaces for now
  *  blank space between
  *  generate entities (chance per one)
  *    add space after entity
  *  only level 1 and 2 enemies and regular doors for now
  *  iterate over length of array
+ *
+ *  could do it so that a string of dashes is created, then iterated over
+ *    find which positions have dashes, replace
+ *
+ *  or just do custom designed paths?
  */
 
 function path_gen($path_length) {
@@ -50,6 +55,7 @@ function path_gen($path_length) {
     }
     return explode(' ', substr(implode($path, ' '), 0, $path_length * 2));
 }
+
 function path_view($path) {
     echo '[';
     foreach ($path as $space) {
@@ -63,14 +69,14 @@ $path = path_gen(9); // one less than desired length
 
 path_view($path);
 
-/* How to Render
+/** How to Render
  *  track player position
  *  track entities
  *  loop for each space, interrupt for entity
  *  choose to move (add ranged and potions later)
  */
 
-/* Dice Movement
+/** Dice Movement
  *  6 sides
  *  Pick up potions and carry on
  *  Stop for enemies and chests
@@ -84,7 +90,7 @@ path_view($path);
  *    Move 1 spaces
  */
 
-/* Dice Fighting
+/** Dice Fighting
  *  6 sides
  *  Shield
  *    Defeat / use Melee skill
@@ -96,7 +102,7 @@ path_view($path);
  *    Defeat and lose health equal to strength + (move back one space)
  */
 
-/* Doors
+/** Doors
  *  Regular door
  *    Pass through as normal, provide description
  *  Puzzle door
@@ -109,7 +115,7 @@ path_view($path);
  *                        [-!-!--*---!-] two puzzles for okay reward - no combat
  */
 
-/* Chests
+/** Chests
  *  Remove health detraction - only reward
  *  Shield
  *    Find 2 gold
@@ -121,7 +127,7 @@ path_view($path);
  *    Find 1 gold and set back 1 space
  */
 
-/* Potions
+/** Potions
  *  Add later
  *  Usable at any time
  *  Each only usable once
@@ -135,7 +141,7 @@ path_view($path);
  *    Defeat an adjacent monster
  */
 
-/* Heroes / Skills
+/** Heroes / Skills
  *  Add later
  *  Barbarian
  *    Melee: defeat all adjacent monsters + move 1 space
@@ -147,7 +153,7 @@ path_view($path);
  *    Ranged: move up to 2 spaces and defeat an adjacent monster
  */
 
-/* Enemies
+/** Enemies
  *  Randomly generate names and bios for higher levels
  *  Level 1
  *    1 Strength, default name
@@ -157,7 +163,7 @@ path_view($path);
  *    3 Strength, random name and description
  */
 
-/* Weapons - cost 3, sell back for 2
+/** Weapons - cost 3, sell back for 2
  *  Add later
  *  Axe
  *    Melee: defeat all adjacent monsters
