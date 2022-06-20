@@ -14,22 +14,17 @@
  *      1 - low level enemy
  *      2 - mid level enemy
  *      3 - mid level enemy
- *  No point in doors with keys because linear
- *    Doors with puzzles instead
- *      Guess the number / mastermind
- *  Generate different paths - one with more enemies and fewer puzzles / higher level enemies for higher reward
- *    [----|--*-1---p---#----]
- *                      [-3----*---!-] one high level enemy for okay reward
- *                      [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
- *                      [-!-!--*---!-] two puzzles for okay reward - no combat
  *  Shop between levels? - save stats to file
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
 
 /* How to Generate
+ *  10 spaces for now
  *  blank space between
  *  generate entities (chance per one)
+ *    add space after entity
  *  only level 1 and 2 enemies and regular doors for now
+ *  iterate over length of array
  */
 
 /* How to Render
@@ -72,6 +67,10 @@
  *    Present player with number guess or mastermind game (depending on difficulty)
  *  Branching door
  *    Generate new paths, some with more enemies and rewards, others with more puzzles
+ *      [----|--*-1---p---#----]
+ *                        [-3----*---!-] one high level enemy for okay reward
+ *                        [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
+ *                        [-!-!--*---!-] two puzzles for okay reward - no combat
  */
 
 /* Chests
