@@ -26,6 +26,19 @@
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
 
+/* How to Generate
+ *  blank space between
+ *  generate entities (chance per one)
+ *  only level 1 and 2 enemies and regular doors for now
+ */
+
+/* How to Render
+ *  track player position
+ *  track entities
+ *  loop for each space, interrupt for entity
+ *  choose to move (add ranged and potions later)
+ */
+
 /* Dice Movement
  *  6 sides
  *  Pick up potions and carry on
@@ -52,6 +65,15 @@
  *    Defeat and lose health equal to strength + (move back one space)
  */
 
+/* Doors
+ *  Regular door
+ *    Pass through as normal, provide description
+ *  Puzzle door
+ *    Present player with number guess or mastermind game (depending on difficulty)
+ *  Branching door
+ *    Generate new paths, some with more enemies and rewards, others with more puzzles
+ */
+
 /* Chests
  *  Remove health detraction - only reward
  *  Shield
@@ -65,6 +87,7 @@
  */
 
 /* Potions
+ *  Add later
  *  Usable at any time
  *  Each only usable once
  *  Life
