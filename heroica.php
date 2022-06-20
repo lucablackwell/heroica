@@ -27,6 +27,39 @@
  *  iterate over length of array
  */
 
+function path_gen($path_length) {
+    // 1 in 2 chance of space
+    // 1 in 4 chance of level 1
+    // 1 in 8 chance of level 2
+    // 1 in 8 chance of door
+    $entities = [
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+        '1', '1', '1', '1',
+        '2', '2',
+        '|'
+    ];
+
+    $path = [];
+    for ($i = 0; count($path) < $path_length;) {
+        $entity = $entities[array_rand($entities)];
+        if ($entity != '-') {
+            $to_add = $entity . '-';
+        } else {
+            $to_add = '-';
+        }
+        $path[] = $to_add;
+        #$path[] = '-';
+    }
+    return $path;
+}
+
+$path = path_gen(100);
+echo '[';
+foreach ($path as $space) {
+    echo $space;
+}
+echo "]\n" . count($path) . "\n";
+
 /* How to Render
  *  track player position
  *  track entities
