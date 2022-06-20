@@ -42,22 +42,25 @@ function path_gen($path_length) {
     for ($i = 0; count($path) < $path_length;) {
         $entity = $entities[array_rand($entities)];
         if ($entity != '-') {
-            $to_add = $entity . '--';
-        } else {
-            $to_add = '-';
+            $path[] = $entity;
+            $path[] = '-';
         }
-        $path[] = $to_add;
-        #$path[] = '-';
+        $path[] = '-';
     }
     return $path;
 }
+function path_view($path) {
+    echo '[';
+    foreach ($path as $space) {
+        echo $space;
+    }
+    echo "]\n" . count($path) . "\n";
+}
 
 $path = path_gen(10);
-echo '[';
-foreach ($path as $space) {
-    echo $space;
-}
-echo "]\n" . count($path) . "\n";
+#var_dump($path);
+
+path_view($path);
 
 /* How to Render
  *  track player position
