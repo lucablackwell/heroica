@@ -46,10 +46,7 @@ function path_gen($path_length, $entities) {
 }
 
 function path_gen_replace($path_length, $entities) {
-    $path = '';
-    for ($i = 0; $i < $path_length; $i++) {
-        $path .= '- ';
-    }
+    $path = str_repeat('- ', $path_length);
     $entity = $entities[array_rand($entities)];
     return explode(' ', $path);
 }
