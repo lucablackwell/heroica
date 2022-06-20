@@ -28,22 +28,21 @@
  */
 
 function path_gen($path_length) {
-    // 1 in 2 chance of space 16
-    // 1 in 4 chance of level 1
-    // 1 in 8 chance of level 2
-    // 1 in 8 chance of door
+    // 2 in 3 chance of space
+    // 1 in 6 chance of level 1
+    // 1 in 12 chance of level 2
+    // 1 in 24 chance of door
     $entities = [
-        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
         '1', '1', '1', '1',
         '2', '2',
         '|'
     ];
-    echo count($entities);
     $path = [];
     for ($i = 0; count($path) < $path_length;) {
         $entity = $entities[array_rand($entities)];
         if ($entity != '-') {
-            $to_add = $entity . '-';
+            $to_add = $entity . '--';
         } else {
             $to_add = '-';
         }
@@ -53,7 +52,7 @@ function path_gen($path_length) {
     return $path;
 }
 
-$path = path_gen(100);
+$path = path_gen(10);
 echo '[';
 foreach ($path as $space) {
     echo $space;
