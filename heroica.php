@@ -45,6 +45,15 @@ function path_gen($path_length, $entities) {
     return explode(' ', substr(implode($path, ' '), 0, $path_length * 2));
 }
 
+function path_gen_replace($path_length, $entities) {
+    $path = '';
+    for ($i = 0; $i < $path_length; $i++) {
+        $path .= '- ';
+    }
+    $entity = $entities[array_rand($entities)];
+    return explode(' ', $path);
+}
+
 function path_view($path) {
     echo '[';
     foreach ($path as $space) {
@@ -64,8 +73,8 @@ $entities = [
     '|'
 ];
 
-$path = path_gen(9, $entities); // one less than desired length
-#var_dump($path);
+#$path = path_gen(9, $entities); // one less than desired length
+$path = path_gen_replace(10, $entities);
 
 path_view($path);
 
