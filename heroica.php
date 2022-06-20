@@ -32,20 +32,9 @@
  *  or just do custom designed paths?
  */
 
-function path_gen($path_length) {
-    // 2 in 3 chance of space
-    // 1 in 6 chance of level 1
-    // 1 in 12 chance of level 2
-    // 1 in 24 chance of door
-    $entities = [
-        '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
-        '1', '1', '1', '1',
-        '2', '2',
-        '|'
-    ];
+function path_gen($path_length, $entities) {
     $path = [];
     for ($i = 0; count($path) < $path_length + 5;) {
-        // why not just trim to be path length?
         $entity = $entities[array_rand($entities)];
         if ($entity != '-') {
             $path[] = $entity;
@@ -61,10 +50,21 @@ function path_view($path) {
     foreach ($path as $space) {
         echo $space;
     }
-    echo "]\n" . count($path) . "\n";
+    echo "]\n";
 }
 
-$path = path_gen(9); // one less than desired length
+// 2 in 3 chance of space
+// 1 in 6 chance of level 1
+// 1 in 12 chance of level 2
+// 1 in 24 chance of door
+$entities = [
+    '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-',
+    '1', '1', '1', '1',
+    '2', '2',
+    '|'
+];
+
+$path = path_gen(9, $entities); // one less than desired length
 #var_dump($path);
 
 path_view($path);
