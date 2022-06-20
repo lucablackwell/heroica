@@ -15,7 +15,7 @@
  *      Guess the number / mastermind
  *  Generate different paths - one with more enemies and fewer puzzles?
  */
-#git test
+
 /* Dice Movement
  *  6 sides
  *  Pick up potions and carry on
