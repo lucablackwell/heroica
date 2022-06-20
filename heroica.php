@@ -23,6 +23,7 @@
  *                      [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
  *                      [-!-!--*---!-] two puzzles for okay reward - no combat
  *  Shop between levels? - save stats to file
+ *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
 
 /* Dice Movement
@@ -99,6 +100,7 @@
  */
 
 /* Weapons - cost 3, sell back for 2
+ *  Add later
  *  Axe
  *    Melee: defeat all adjacent monsters
  *  Wand
