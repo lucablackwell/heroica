@@ -43,8 +43,15 @@ function path_gen($path_length, $entities) {
 }
 
 function path_return_dashes($path) {
-
-    // return array of spaces where dashes are
+    $path = explode(' ', $path);
+    $dash_positions = [];
+    for ($i = 0; $i < count($path); $i++) {
+        if ($path[$i] == '-') {
+            $dash_positions[] = $i;
+        }
+    }
+    var_dump($dash_positions);
+    // return array of positions of dashes
 }
 
 /**
@@ -53,6 +60,7 @@ function path_return_dashes($path) {
  */
 function path_gen_replace($path_length, $entities) {
     $path = str_repeat('- ', $path_length);
+    path_return_dashes($path . 'e 2 [ - e');
     $entity = $entities[array_rand($entities)];
     return explode(' ', $path);
 }
