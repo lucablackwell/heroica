@@ -50,6 +50,8 @@ function path_return_dashes($path) {
             $dash_positions[] = $i;
         }
     }
+    echo count($path) / count($dash_positions);
+    exit;
     return $dash_positions;
 }
 
@@ -62,7 +64,8 @@ function path_insert($path, $entity, $probability) {
  *    find which positions have dashes, replace
  */
 function path_gen_replace($path_length, $entities) {
-    $path = str_repeat('- ', $path_length);
+    $path = str_repeat('- ', $path_length - 1);
+    $path .= '-';
     $dashes = path_return_dashes($path);
     $entity = $entities[array_rand($entities)];
     return explode(' ', $path);
