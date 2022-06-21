@@ -43,7 +43,7 @@ function path_gen($path_length, $entities) {
 }
 
 function path_return_dashes($path) {
-    $path = explode(' ', $path);
+    $path = explode(']', $path);
     $dash_positions = [];
     for ($i = 0; $i < count($path); $i++) {
         if ($path[$i] == '-') {
@@ -70,16 +70,15 @@ function path_insert($path, $entity_arr) {
     // for the max amount to add
     $dashes = path_return_dashes($path);
     for ($i = 0; $i < $amount; $i++) {
-        var_dump($dashes);
         if ($prob_arr[array_rand($prob_arr)] == 1) {
-            // replace random dash position with the entity
-            $path = substr_replace($path, $entity, $dashes[array_rand($dashes)], 1);
+            // replace random dash` position with the entity
+            $to_add = $dashes[array_rand($dashes)];
+            //echo substr($path, $dashes[array_rand($dashes)]) . "\n";
+            $path = substr_replace($path, $entity, $to_add, 1);
             $dashes = path_return_dashes($path);
         }
     }
-    var_dump($path);
-    exit;
-    return $path;
+    return str_replace(']', '', $path);
 }
 
 /**
@@ -87,7 +86,7 @@ function path_insert($path, $entity_arr) {
  *    find which positions have dashes, replace
  */
 function path_gen_replace($path_length, $entities) {
-    $path = str_repeat('- ', $path_length - 1);
+    $path = str_repeat('-]', $path_length - 1);
     $path .= '-';
     $path = path_insert($path, $entities[0]);
     // loop through $entities
