@@ -54,23 +54,25 @@ function path_return_dashes($path) {
 }
 
 /**
- *  take path, positions of dashes, entity to insert, and probability of insertion
+ *  take path, positions of dashes, entity to insert (with probability)
  *    generate an array of the length provided by $probability (1 in ??), with one item being 1, and the rest 0
  *    if random pick from the array is 1, pick randomly from dash positions array and insert in that position
  */
-function path_insert($path, $dashes, $entity, $probability) {
+function path_insert($path, $dashes, $entity) {
 
 }
 
 /**
- *  could do it so that a string of dashes is created, then iterated over
+ *  a string of dashes is created, then iterated over
  *    find which positions have dashes, replace
  */
 function path_gen_replace($path_length, $entities) {
     $path = str_repeat('- ', $path_length - 1);
     $path .= '-';
     $dashes = path_return_dashes($path);
-    $entity = $entities[array_rand($entities)];
+    $path = path_insert($path, $dashes, $entities[1]);
+    // loop through $entities
+    #$entity = $entities[array_rand($entities)];
     return explode(' ', $path);
 }
 
@@ -93,8 +95,15 @@ $entities = [
     '|'
 ];
 
+$entities_prob = [
+    '-' => 0.5,
+    '1' => 0.167,
+    '2' => 0.084,
+    '|' => 0.042
+];
+
 #$path = path_gen(9, $entities); // one less than desired length
-$path = path_gen_replace(10, $entities);
+$path = path_gen_replace(10, $entities_prob);
 
 path_view($path);
 
