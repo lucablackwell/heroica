@@ -50,8 +50,11 @@ function path_return_dashes($path) {
             $dash_positions[] = $i;
         }
     }
-    var_dump($dash_positions);
-    // return array of positions of dashes
+    return $dash_positions;
+}
+
+function path_insert($path, $entity, $probability) {
+
 }
 
 /**
@@ -60,7 +63,7 @@ function path_return_dashes($path) {
  */
 function path_gen_replace($path_length, $entities) {
     $path = str_repeat('- ', $path_length);
-    path_return_dashes($path . 'e 2 [ - e');
+    $dashes = path_return_dashes($path);
     $entity = $entities[array_rand($entities)];
     return explode(' ', $path);
 }
