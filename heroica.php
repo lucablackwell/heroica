@@ -54,16 +54,25 @@ function path_return_dashes($path) {
 }
 
 /**
- *  take path, positions of dashes, entity to insert (with probability) and how many to add
+ *  take path, positions of entity to insert (with probability) and how many to add
  *    generate an array of the length provided by $probability (1 in ??), with one item being 1, and the rest 0
  *    if random pick from the array is 1, pick randomly from dash positions array and insert in that position
  */
-function path_insert($path, $dashes, $entity) {
-    $probability = $entity[1];
+function path_insert($path, $entity_arr) {
+    $entity = $entity_arr[0];
+    $probability = $entity_arr[1];
+    $amount = $entity_arr[2];
     $prob_arr = [1];
     // generate probability array
-    $prob_arr = array_pad($prob_arr, $entity[1], 0);
-
+    $prob_arr = array_pad($prob_arr, $probability/2, 0);
+    // for the max amount to add
+    for ($i = 0; $i < $amount; $i++) {
+        $dashes = path_return_dashes($path);
+        if ($prob_arr[array_rand($prob_arr)] == 1) {
+            // replace random dash position with the entity
+            $path = substr_replace($path, $entity, $dashes[array_rand($dashes)], 1);
+        }
+    }
     return $path;
 }
 
@@ -74,8 +83,7 @@ function path_insert($path, $dashes, $entity) {
 function path_gen_replace($path_length, $entities) {
     $path = str_repeat('- ', $path_length - 1);
     $path .= '-';
-    $dashes = path_return_dashes($path);
-    $path = path_insert($path, $dashes, $entities[1]);
+    $path = path_insert($path, $entities[0]);
     // loop through $entities
     #$entity = $entities[array_rand($entities)];
     return explode(' ', $path);
@@ -108,7 +116,7 @@ $entities_prob = [
 ];
 
 #$path = path_gen(9, $entities); // one less than desired length
-$path = path_gen_replace(10, $entities_prob);
+$path = path_gen_replace(100, $entities_prob);
 
 path_view($path);
 
