@@ -54,12 +54,17 @@ function path_return_dashes($path) {
 }
 
 /**
- *  take path, positions of dashes, entity to insert (with probability)
+ *  take path, positions of dashes, entity to insert (with probability) and how many to add
  *    generate an array of the length provided by $probability (1 in ??), with one item being 1, and the rest 0
  *    if random pick from the array is 1, pick randomly from dash positions array and insert in that position
  */
 function path_insert($path, $dashes, $entity) {
+    $probability = $entity[1];
+    $prob_arr = [1];
+    // generate probability array
+    $prob_arr = array_pad($prob_arr, $entity[1], 0);
 
+    return $path;
 }
 
 /**
@@ -95,11 +100,11 @@ $entities = [
     '|'
 ];
 
+// entity, probability (1/??), amount relative to length (10)
 $entities_prob = [
-    '-' => 0.5,
-    '1' => 0.167,
-    '2' => 0.084,
-    '|' => 0.042
+    ['1', 6, 4],
+    ['2', 12, 2],
+    ['|', 12, 4]
 ];
 
 #$path = path_gen(9, $entities); // one less than desired length
