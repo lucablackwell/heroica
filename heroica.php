@@ -50,12 +50,15 @@ function path_return_dashes($path) {
             $dash_positions[] = $i;
         }
     }
-    echo count($path) / count($dash_positions);
-    exit;
     return $dash_positions;
 }
 
-function path_insert($path, $entity, $probability) {
+/**
+ *  take path, positions of dashes, entity to insert, and probability of insertion
+ *    generate an array of the length provided by $probability (1 in ??), with one item being 1, and the rest 0
+ *    if random pick from the array is 1, pick randomly from dash positions array and insert in that position
+ */
+function path_insert($path, $dashes, $entity, $probability) {
 
 }
 
