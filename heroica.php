@@ -26,9 +26,6 @@
  *  only level 1 and 2 enemies and regular doors for now
  *  iterate over length of array
  *
- *  could do it so that a string of dashes is created, then iterated over
- *    find which positions have dashes, replace
- *
  *  or just do custom designed paths?
  */
 
@@ -45,6 +42,15 @@ function path_gen($path_length, $entities) {
     return explode(' ', substr(implode($path, ' '), 0, $path_length * 2));
 }
 
+function path_return_dashes($path) {
+
+    // return array of spaces where dashes are
+}
+
+/**
+ *  could do it so that a string of dashes is created, then iterated over
+ *    find which positions have dashes, replace
+ */
 function path_gen_replace($path_length, $entities) {
     $path = str_repeat('- ', $path_length);
     $entity = $entities[array_rand($entities)];
