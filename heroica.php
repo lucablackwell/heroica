@@ -62,8 +62,7 @@ function path_return_dashes($path) {
 function path_insert($path, $entity_arr) {
     $entity = $entity_arr[0];
     $probability = $entity_arr[1];
-    $amount = $entity_arr[2];
-    $amount = round((strlen($path) / $amount) * 100);
+    $amount = round((strlen($path) / $entity_arr[2]) * 100);
     $prob_arr = [1];
     // generate probability array
     $prob_arr = array_pad($prob_arr, $probability, 0);
@@ -71,7 +70,7 @@ function path_insert($path, $entity_arr) {
     $dashes = path_return_dashes($path);
     for ($i = 0; $i < $amount; $i++) {
         if ($prob_arr[array_rand($prob_arr)] == 1) {
-            // replace random dash` position with the entity
+            // replace random dash position with the entity
             $to_add = $dashes[array_rand($dashes)];
             //echo substr($path, $dashes[array_rand($dashes)]) . "\n";
             $path = substr_replace($path, $entity, $to_add, 1);
