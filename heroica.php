@@ -114,9 +114,9 @@ $entities = [
 
 // entity, probability (1/??), amount relative to length (10)
 $entities_prob = [
-    ['1', 6, 40],
-    ['2', 12, 20 ],
-    ['|', 12, 30]
+    ['1', 6, 30],
+    ['2', 12, 10 ],
+    ['|', 12, 20]
 ];
 
 #$path = path_gen(9, $entities); // one less than desired length
