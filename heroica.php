@@ -5,11 +5,11 @@
  *  Randomize chests, potions, enemies (entities)
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
  *  Display progress with entities
- *    [----|--*-1---p---#----]
+ *    [----|--*-1---p--:----]
  *      * - chest
  *      | - door
  *      ! - puzzle door
- *      # - branching door
+ *      : - branching door
  *      p - potion
  *      1 - low level enemy
  *      2 - mid level enemy
@@ -89,7 +89,7 @@ function path_gen_replace($path_length, $entities) {
     $path .= '-';
     $path = path_insert($path, $entities[0]);
     // loop through $entities
-    #$entity = $entities[array_rand($entities)];
+    //$entity = $entities[array_rand($entities)];
     return explode(' ', $path);
 }
 
@@ -119,8 +119,14 @@ $entities_prob = [
     ['|', 12, 20]
 ];
 
-#$path = path_gen(9, $entities); // one less than desired length
-$path = path_gen_replace(10, $entities_prob);
+//$path = path_gen(9, $entities); // one less than desired length
+//$path = path_gen_replace(10, $entities_prob);
+
+// pick from pre-defined paths
+$pre_def = [
+
+];
+$path = $pre_def[array_rand($pre_def)];
 
 path_view($path);
 
@@ -164,7 +170,7 @@ path_view($path);
  *    Present player with number guess or mastermind game (depending on difficulty)
  *  Branching door
  *    Generate new paths, some with more enemies and rewards, others with more puzzles
- *      [----|--*-1---p---#----]
+ *      [----|--*-1---p---:----]
  *                        [-3----*---!-] one high level enemy for okay reward
  *                        [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
  *                        [-!-!--*---!-] two puzzles for okay reward - no combat
