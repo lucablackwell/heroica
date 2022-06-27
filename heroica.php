@@ -131,13 +131,13 @@ $entities_prob = [
 //      3 - high level enemy
 // pick from pre-defined paths
 $pre_def = [
-    '-!-*-1--p-',
-    '--2-|--*--',
-    '-3--*---!-',
-    '-!-!--*-!-',
-    '-2-2-*--p-'
+    '-]!]-]*]-]1]-]-]p]-',
+    '-]-]2]-]|]-]-]*]-]-',
+    '-]3]-]-]*]-]-]-]!]-',
+    '-]!]-]!]-]-]*]-]!]-',
+    '-]2]-]2]-]*]-]-]p]-'
 ];
-$path = $pre_def[array_rand($pre_def)];
+$path = explode(']', $pre_def[array_rand($pre_def)]);
 
 path_view($path);
 
