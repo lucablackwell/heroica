@@ -44,9 +44,34 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 
 ## Player stats to track and display
 * Health `3/10`
-  * display in red/orange/green based on percentage left
+    * display in red/orange/green based on percentage left
 * Gold - `02`/`23`
-  * display in yellow
+    * display in yellow
 * Items
-  * list of weapons & potions
-  * blue `items` title, white bold items
+    * list of weapons & potions
+    * blue `items` title, white bold items
+
+## What player can do
+1. move
+    * show dice roll - function for rolling?
+    * show outcome
+    * show progression - flag for movement that ignores menus
+    * show `moved ?? spaces`
+2. shop
+    * show gold, current weapons
+    * for each weapon
+        1. buy weapon
+            * if enough gold:
+                * remove gold
+                * remove weapon from shop
+                * add weapon to inventory
+                * show `?? bought for ?? gold`
+            * if not enough gold:
+                * show relevant message `Not enough gold!`
+        2. sell weapon
+            * remove weapon from inventory
+            * add weapon to shop
+            * add gold
+            * show `?? sold for ?? gold`
+4. potions
+5. skills

@@ -29,7 +29,6 @@
  *  or just do custom designed paths?
  */
 
-
 function path_gen($path_length, $entities) {
     $path = [];
     for ($i = 0; count($path) < $path_length + 5;) {
@@ -176,9 +175,81 @@ function path_play($path, $player) {
 
         // OTHER LOGIC GOES HERE
         $player['pos']++;
+        $choice = show_choice(['move', 'shop', 'potions ', 'skills']);
+        if ($choice == 'move') {
+            exit('teete');
+        } elseif ($choice == 'shop') {
+            exit('not yet implemented');
+        } elseif ($choice == 'potions') {
+            exit('not yet implemented');
+        } elseif ($choice == 'skills') {
+            exit('not yet implemented');
+        } else {
+            exit('Something isn\'t right...');
+        }
     }
+}
 
-};
+# Show and take input for choices
+function show_choice($choices) {
+    # Initial spacer
+    echo "    ";
+    # For each choice
+    for ($i = 0; $i < count($choices); $i++) {
+        # Show the choice"\e[1;34mA\e[0m"
+        echo("\e[1;34m" . ($i+1) . "\e[0m. " . $choices[$i] . "\n");
+        # If it is the last
+        if ($i != count($choices) - 1) {
+            # Intermediate spacer
+            echo "    ";
+        }
+    }
+    # Take user input
+    $input = readline('> ');
+    $forward = false;
+    $to_return = null;
+    while (!$forward) {
+        # Loop through each choice
+        foreach ($choices as $choice) {
+            # If the input is only numbers, is within the range of choices and is equal to the current choice
+            if (preg_match('/[0-9]/', $input) && !preg_match('/[a-z]/', $input) && $input <= count($choices) && $choices[$input-1] == $choice) {
+                # Set the current choice to be returned
+                $to_return = $choice;
+                # If the input is the same as the current choice
+            } elseif (strtolower($input) == strtolower($choice)) {
+                # Set the current choice to be returned
+                $to_return = $choice;
+            }
+        }
+        # If there is something to return
+        if ($to_return) {
+            # End the loop
+            $forward = true;
+            # If there isn't something to return (i.e. the input is invalid)
+        } else {
+            echo("\nInvalid input." . "\n");
+            # Take user input again
+            $input = readline('> ');
+        }
+    }
+    # Return the assigned value
+    return $to_return;
+}
+
+/** Dice Movement
+ *  6 sides
+ *  Pick up potions and carry on
+ *  Stop for enemies and chests
+ *  Shield
+ *    Move up to 4 spaces / use Ranged skill
+ *  Sword / 3
+ *    Move 3 spaces
+ *  Skull / 2
+ *    Move 2 spaces
+ *  Sword & Skull / 1
+ *    Move 1 spaces
+ */
+
 
 // 2 in 3 chance of space
 // 1 in 6 chance of level 1
@@ -252,20 +323,6 @@ $player = [
 ];
 
 path_play($path, $player);
-
-/** Dice Movement
- *  6 sides
- *  Pick up potions and carry on
- *  Stop for enemies and chests
- *  Shield
- *    Move up to 4 spaces / use Ranged skill
- *  Sword / 3
- *    Move 3 spaces
- *  Skull / 2
- *    Move 2 spaces
- *  Sword & Skull / 1
- *    Move 1 spaces
- */
 
 /** Dice Fighting
  *  6 sides
@@ -342,6 +399,7 @@ path_play($path, $player);
 
 /** Weapons - cost 3, sell back for 2
  *  Add later
+ *  Descriptions for each skill
  *  Axe
  *    Melee: defeat all adjacent monsters
  *  Wand
