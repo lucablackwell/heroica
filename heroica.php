@@ -102,27 +102,37 @@ function path_view($path) {
     echo "]\n";
 }
 
-/** Colours
- *  Red for enemies \e[1;31m
- *  Blue for player \e[1;34m
- *  Yellow for chests \e[1;33m
- *  Light green for potions \e[1;32m
- */
 function path_view_str($path) {
     echo '[';
-    for ($i = 0; $i < strlen($path); $i++) {
-        $path_arr[] = $path[$i];
-    }
-    foreach ($path_arr as $space) {
+    foreach ($path as $space) {
         switch ($space) {
-            case ('A'):
-                //echo "\e[1;34mA\e[0m";
+            case ('!'):
+                echo "\e[1;37m!\e[0m";
+                break;
+            case (':'):
+                echo "\e[1;37m:\e[0m";
+                break;
+            case ('|'):
+                echo "\e[1;37m|\e[0m";
+                break;
             case ('*'):
                 echo "\e[1;33m*\e[0m";
+                break;
             case ('p'):
                 echo "\e[1;32mp\e[0m";
+                break;
+            case ('1'):
+                echo "\e[1;31m1\e[0m";
+                break;
+            case ('2'):
+                echo "\e[1;31m2\e[0m";
+                break;
+            case ('3'):
+                echo "\e[1;31m3\e[0m";
+                break;
             default:
-                echo $space;
+                echo "\e[1;37m-\e[0m";
+                break;
         }
     }
 
@@ -136,6 +146,13 @@ function path_view_str($path) {
  *  choose to move (add ranged and potions later)
  *  -p-1-!-*-3
  */
+/** Colours
+ *  Red for enemies \e[1;31m
+ *  Blue for player \e[1;34m
+ *  Yellow for chests \e[1;33m
+ *  Light green for potions \e[1;32m
+ *  Grey for doors \e[1;37m
+ */
 function path_play($path, $player) {
     $path_og = $path;
     while ($player['pos'] != count($path)) {
@@ -143,15 +160,29 @@ function path_play($path, $player) {
         #$path_str = implode('', $path);
         #echo $path_str[$player['pos']];
         #$path_str = substr_replace($path_str, '\e[1;34mA\e[0m', $player['pos'], 1);
-        $past = array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m")[0];
+
+        array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
         if ($player['pos'] != 0) {
-            array_splice($path, $player['pos']-1, 1, '-');
-            path_view($path);
+            switch ($path_og[$player['pos']-1]) {
+                case ('!'):
+                    $past = "\e[0;37m!\e[0m";
+                    break;
+                case (':'):
+                    $past = "\e[0;37m:\e[0m";
+                    break;
+                case ('|'):
+                    $past = "\e[0;37m|\e[0m";
+                    break;
+                case ('*'):
+                    $past = "\e[0;33m*\e[0m";
+                    break;
+                default:
+                    $past = "\e[0;37m-\e[0m";
+                    break;
+            }
+            array_splice($path, $player['pos']-1, 1, $past);
         }
-
-
-
-        #path_view($path);
+        path_view($path);
         $player['pos']++;
     }
 
@@ -222,15 +253,15 @@ $path = [
 // -p-1-!-*-3
 $path = [
     '-',
-    'p',
+    "\e[1;32mp\e[0m",
     '-',
-    '1',
+    "\e[1;31m1\e[0m",
     '-',
     '!',
     '-',
-    '*',
+    "\e[1;33m*\e[0m",
     '-',
-    '3'
+    "\e[1;31m3\e[0m",
 ];
 
 $player = [
