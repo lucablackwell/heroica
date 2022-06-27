@@ -155,16 +155,42 @@ function path_view_str($path) {
  */
 function path_play($path, $player) {
     $path_og = $path;
+    for ($i = 0; $i < count($path); $i++) {
+        switch ($path[$i]) {
+            case ('!'):
+                $path[$i] = "\e[1;37m!\e[0m";
+                break;
+            case (':'):
+                $path[$i] = "\e[1;37m:\e[0m";
+                break;
+            case ('|'):
+                $path[$i] = "\e[1;37m|\e[0m";
+                break;
+            case ('*'):
+                $path[$i] = "\e[1;33m*\e[0m";
+                break;
+            case ('p'):
+                $path[$i] = "\e[1;32mp\e[0m";
+                break;
+            case ('1'):
+                $path[$i] = "\e[1;31m1\e[0m";
+                break;
+            case ('2'):
+                $path[$i] = "\e[1;31m2\e[0m";
+                break;
+            case ('3'):
+                $path[$i] = "\e[1;31m3\e[0m";
+                break;
+            default:
+                break;
+        }
+    }
     while ($player['pos'] != count($path)) {
-        #path_view($path_og);
-        #$path_str = implode('', $path);
-        #echo $path_str[$player['pos']];
-        #$path_str = substr_replace($path_str, '\e[1;34mA\e[0m', $player['pos'], 1);
-
         array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
         if ($player['pos'] != 0) {
             switch ($path_og[$player['pos']-1]) {
                 case ('!'):
+                    $path[$player['pos']-1] = "\e[0;37m!\e[0m";
                     $past = "\e[0;37m!\e[0m";
                     break;
                 case (':'):
@@ -174,6 +200,7 @@ function path_play($path, $player) {
                     $past = "\e[0;37m|\e[0m";
                     break;
                 case ('*'):
+                    $path[$player['pos']-1] = "\e[0;33m*\e[0m";
                     $past = "\e[0;33m*\e[0m";
                     break;
                 default:
@@ -182,6 +209,7 @@ function path_play($path, $player) {
             }
             array_splice($path, $player['pos']-1, 1, $past);
         }
+
         path_view($path);
         $player['pos']++;
     }
@@ -253,15 +281,15 @@ $path = [
 // -p-1-!-*-3
 $path = [
     '-',
-    "\e[1;32mp\e[0m",
+    'p',
     '-',
-    "\e[1;31m1\e[0m",
+    '1',
     '-',
     '!',
     '-',
-    "\e[1;33m*\e[0m",
+    '*',
     '-',
-    "\e[1;31m3\e[0m",
+    '3'
 ];
 
 $player = [
