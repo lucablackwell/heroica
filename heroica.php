@@ -13,7 +13,7 @@
  *      p - potion
  *      1 - low level enemy
  *      2 - mid level enemy
- *      3 - mid level enemy
+ *      3 - high level enemy
  *  Shop between levels? - save stats to file
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
@@ -121,10 +121,21 @@ $entities_prob = [
 
 //$path = path_gen(9, $entities); // one less than desired length
 //$path = path_gen_replace(10, $entities_prob);
-
+//      * - chest
+//      | - door
+//      ! - puzzle door
+//      : - branching door
+//      p - potion
+//      1 - low level enemy
+//      2 - mid level enemy
+//      3 - high level enemy
 // pick from pre-defined paths
 $pre_def = [
-
+    '-!-*-1--p-',
+    '--2-|--*--',
+    '-3--*---!-',
+    '-!-!--*-!-',
+    '-2-2-*--p-'
 ];
 $path = $pre_def[array_rand($pre_def)];
 
