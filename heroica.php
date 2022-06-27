@@ -5,15 +5,15 @@
  *  Randomize chests, potions, enemies (entities)
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
  *  Display progress with entities
- *    [----|--*-1---p---#----]
- *      * - chest
+ *    [----|--*-1---p--:----]
  *      | - door
  *      ! - puzzle door
- *      # - branching door
+ *      : - branching door
+ *      * - chest
  *      p - potion
  *      1 - low level enemy
  *      2 - mid level enemy
- *      3 - mid level enemy
+ *      3 - top level enemy
  *  Shop between levels? - save stats to file
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
@@ -28,6 +28,7 @@
  *
  *  or just do custom designed paths?
  */
+
 
 function path_gen($path_length, $entities) {
     $path = [];
@@ -89,7 +90,7 @@ function path_gen_replace($path_length, $entities) {
     $path .= '-';
     $path = path_insert($path, $entities[0]);
     // loop through $entities
-    #$entity = $entities[array_rand($entities)];
+    //$entity = $entities[array_rand($entities)];
     return explode(' ', $path);
 }
 
@@ -100,6 +101,84 @@ function path_view($path) {
     }
     echo "]\n";
 }
+
+/** How to Render
+ *  track player position
+ *  track entities
+ *  loop for each space, interrupt for entity
+ *  choose to move (add ranged and potions later)
+ *  -p-1-!-*-3
+ */
+/** Colours
+ *  Red for enemies \e[1;31m
+ *  Blue for player \e[1;34m
+ *  Yellow for chests \e[1;33m
+ *  Light green for potions \e[1;32m
+ *  Grey for doors \e[1;37m
+ */
+function path_play($path, $player) {
+    $path_og = $path;
+    for ($i = 0; $i < count($path); $i++) {
+        switch ($path[$i]) {
+            case ('!'):
+                $path[$i] = "\e[1;37m!\e[0m";
+                break;
+            case (':'):
+                $path[$i] = "\e[1;37m:\e[0m";
+                break;
+            case ('|'):
+                $path[$i] = "\e[1;37m|\e[0m";
+                break;
+            case ('*'):
+                $path[$i] = "\e[1;33m*\e[0m";
+                break;
+            case ('p'):
+                $path[$i] = "\e[1;32mp\e[0m";
+                break;
+            case ('1'):
+                $path[$i] = "\e[1;31m1\e[0m";
+                break;
+            case ('2'):
+                $path[$i] = "\e[1;31m2\e[0m";
+                break;
+            case ('3'):
+                $path[$i] = "\e[1;31m3\e[0m";
+                break;
+            default:
+                break;
+        }
+    }
+    while ($player['pos'] != count($path)) {
+        array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
+        if ($player['pos'] != 0) {
+            switch ($path_og[$player['pos']-1]) {
+                case ('!'):
+                    $path[$player['pos']-1] = "\e[0;37m!\e[0m";
+                    $past = "\e[0;37m!\e[0m";
+                    break;
+                case (':'):
+                    $past = "\e[0;37m:\e[0m";
+                    break;
+                case ('|'):
+                    $past = "\e[0;37m|\e[0m";
+                    break;
+                case ('*'):
+                    $path[$player['pos']-1] = "\e[0;33m*\e[0m";
+                    $past = "\e[0;33m*\e[0m";
+                    break;
+                default:
+                    $past = "\e[0;37m-\e[0m";
+                    break;
+            }
+            array_splice($path, $player['pos']-1, 1, $past);
+        }
+        path_view($path);
+
+        // OTHER LOGIC GOES HERE
+        $player['pos']++;
+    }
+
+};
 
 // 2 in 3 chance of space
 // 1 in 6 chance of level 1
@@ -119,17 +198,60 @@ $entities_prob = [
     ['|', 12, 20]
 ];
 
-#$path = path_gen(9, $entities); // one less than desired length
-$path = path_gen_replace(10, $entities_prob);
+//$path = path_gen(9, $entities); // one less than desired length
+//$path = path_gen_replace(10, $entities_prob);
+//      | - door
+//      ! - puzzle door
+//      : - branching door
+//      * - chest
+//      p - potion
+//      1 - low level enemy
+//      2 - mid level enemy
+//      3 - top level enemy
+// pick from pre-defined paths
+$pre_def = [
+    '-]!]-]*]-]1]-]-]p]-',
+    '-]-]2]-]|]-]-]*]-]-',
+    '-]3]-]-]*]-]-]-]!]-',
+    '-]!]-]!]-]-]*]-]!]-',
+    '-]2]-]2]-]*]-]-]p]-'
+];
+$path = explode(']', $pre_def[array_rand($pre_def)]);
 
-path_view($path);
+//path_view($path);
 
-/** How to Render
- *  track player position
- *  track entities
- *  loop for each space, interrupt for entity
- *  choose to move (add ranged and potions later)
+/** Player stats
+ *  Health - '3/10'
+ *    display in red/orange/green based on percentage left
+ *  Gold - '02'/'23'
+ *    display in yellow
+ *  Items
+ *    weapons and potions: blue title, white bold items
  */
+
+// testing path:
+// -p-1-!-*-3
+$path = [
+    '-',
+    'p',
+    '-',
+    '1',
+    '-',
+    '!',
+    '-',
+    '*',
+    '-',
+    '3'
+];
+
+$player = [
+    'pos' => 0,
+    'health current' => 5,
+    'health max' => 5,
+    'gold' => 0
+];
+
+path_play($path, $player);
 
 /** Dice Movement
  *  6 sides
@@ -152,9 +274,9 @@ path_view($path);
  *  Sword / 3
  *    Defeat
  *  Skull / 2
- *    Lose health equal to strength + (move back one space)
+ *    Lose health equal to strength
  *  Sword & Skull / 1
- *    Defeat and lose health equal to strength + (move back one space)
+ *    Defeat and lose health equal to strength
  */
 
 /** Doors
@@ -164,8 +286,8 @@ path_view($path);
  *    Present player with number guess or mastermind game (depending on difficulty)
  *  Branching door
  *    Generate new paths, some with more enemies and rewards, others with more puzzles
- *      [----|--*-1---p---#----]
- *                        [-3----*---!-] one high level enemy for okay reward
+ *      [----|--*-1---p---:----]
+ *                        [-3----*---!-] one top level enemy for okay reward
  *                        [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
  *                        [-!-!--*---!-] two puzzles for okay reward - no combat
  */
