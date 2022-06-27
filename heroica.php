@@ -172,8 +172,9 @@ function path_play($path, $player) {
             }
             array_splice($path, $player['pos']-1, 1, $past);
         }
-
         path_view($path);
+
+        // OTHER LOGIC GOES HERE
         $player['pos']++;
     }
 
@@ -217,18 +218,6 @@ $pre_def = [
 ];
 $path = explode(']', $pre_def[array_rand($pre_def)]);
 
-$path = [
-    '-',
-    'p',
-    '-',
-    '1',
-    '-',
-    '!',
-    '-',
-    '*',
-    '-',
-    '3',
-];
 //path_view($path);
 
 /** Player stats
