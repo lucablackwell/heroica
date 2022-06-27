@@ -3,13 +3,13 @@ Things that can happen on a turn (one iteration)
 roll key: shield, sword/3, skull/2, sword+skull/1
 
 ## Entities
-1. Door - `|`
+1. Door - `|` - white bold
    * go through it
    * description
-2. Puzzle door - `!`
+2. Puzzle door - `!` - white bold
    * generate a puzzle (mastermind / number guess)
    * go through it once complete
-3. Branching door - `:`
+3. Branching door - `:` - white bold
    * generate other paths with varying enemies and puzzles
 4. Chest - `*`
    * roll: 2 gold, 1 gold, back a space, 1 gold and back a space
