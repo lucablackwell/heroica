@@ -145,7 +145,7 @@ function path_play($path, $player) {
         #$path_str = substr_replace($path_str, '\e[1;34mA\e[0m', $player['pos'], 1);
         $past = array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m")[0];
         if ($player['pos'] != 0) {
-            array_splice($path, $player['pos']-1, 1, "\e[1;33m" . $path_og[$player['pos']-1] . "\e[0m");
+            array_splice($path, $player['pos']-1, 1, '-');
             path_view($path);
         }
 
