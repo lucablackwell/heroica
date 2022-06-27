@@ -14,6 +14,15 @@ Entity:
 4. Chest - `*`
    * roll: 2 gold, 1 gold, back a space, 1 gold and back a space
 5. Potion - `p`
+   * available potions:
+     1. Life
+        * restore 2 health
+     2. Luck
+        * re-roll the dice
+     3. Speed
+        * move up to 4 extra spaces
+     4. Strength
+        * defeat an adjacent monster
    * generate which to pick up (based on remaining) (if all used, start over)
    * show text about adding to inventory
      * description of specific potion
