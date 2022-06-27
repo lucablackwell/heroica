@@ -183,9 +183,9 @@ path_view($path);
  *  Sword / 3
  *    Defeat
  *  Skull / 2
- *    Lose health equal to strength + (move back one space)
+ *    Lose health equal to strength
  *  Sword & Skull / 1
- *    Defeat and lose health equal to strength + (move back one space)
+ *    Defeat and lose health equal to strength
  */
 
 /** Doors
