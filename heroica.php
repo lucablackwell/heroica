@@ -6,14 +6,14 @@
  *  Difficulty increases puzzle difficulty, harder enemy count & potion chances
  *  Display progress with entities
  *    [----|--*-1---p--:----]
- *      * - chest
  *      | - door
  *      ! - puzzle door
  *      : - branching door
+ *      * - chest
  *      p - potion
  *      1 - low level enemy
  *      2 - mid level enemy
- *      3 - high level enemy
+ *      3 - top level enemy
  *  Shop between levels? - save stats to file
  *  Way to find health upgrades - chests, potion or certain amount of enemies killed?
  */
@@ -101,6 +101,16 @@ function path_view($path) {
     echo "]\n";
 }
 
+/** How to Render
+ *  track player position
+ *  track entities
+ *  loop for each space, interrupt for entity
+ *  choose to move (add ranged and potions later)
+ */
+function path_play($path, $stats) {
+
+};
+
 // 2 in 3 chance of space
 // 1 in 6 chance of level 1
 // 1 in 12 chance of level 2
@@ -121,14 +131,14 @@ $entities_prob = [
 
 //$path = path_gen(9, $entities); // one less than desired length
 //$path = path_gen_replace(10, $entities_prob);
-//      * - chest
 //      | - door
 //      ! - puzzle door
 //      : - branching door
+//      * - chest
 //      p - potion
 //      1 - low level enemy
 //      2 - mid level enemy
-//      3 - high level enemy
+//      3 - top level enemy
 // pick from pre-defined paths
 $pre_def = [
     '-]!]-]*]-]1]-]-]p]-',
@@ -141,11 +151,15 @@ $path = explode(']', $pre_def[array_rand($pre_def)]);
 
 path_view($path);
 
-/** How to Render
- *  track player position
- *  track entities
- *  loop for each space, interrupt for entity
- *  choose to move (add ranged and potions later)
+/** Player stats
+ *  Health - '3/10'
+ *    display in red/orange/green based on percentage left
+ *  Gold - '02'/'23'
+ *    display in yellow
+ *  Stop for enemies and chests
+ *  Shield
+ *    Move up to 4 spaces / use Ranged skill
+ *  Sword / 3
  */
 
 /** Dice Movement
@@ -182,7 +196,7 @@ path_view($path);
  *  Branching door
  *    Generate new paths, some with more enemies and rewards, others with more puzzles
  *      [----|--*-1---p---:----]
- *                        [-3----*---!-] one high level enemy for okay reward
+ *                        [-3----*---!-] one top level enemy for okay reward
  *                        [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
  *                        [-!-!--*---!-] two puzzles for okay reward - no combat
  */
