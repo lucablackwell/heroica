@@ -29,27 +29,6 @@
  *  or just do custom designed paths?
  */
 
-/** Colours
- *  Red for enemies (light red?)
- *  Blue for player
- *  Yellow for chests
- *  Light green for potions
- */
-function red($text) {
-    return "\e[1;31m$text\e[0m";
-}
-
-function blue($text) {
-    return "\e[1;34m$text\e[0m";
-}
-
-function yellow($text) {
-    return "\e[1;33m$text\e[0m";
-}
-
-function green($text) {
-    return "\e[1;32m$text\e[0m";
-}
 
 function path_gen($path_length, $entities) {
     $path = [];
@@ -123,11 +102,30 @@ function path_view($path) {
     echo "]\n";
 }
 
+/** Colours
+ *  Red for enemies \e[1;31m
+ *  Blue for player \e[1;34m
+ *  Yellow for chests \e[1;33m
+ *  Light green for potions \e[1;32m
+ */
 function path_view_str($path) {
     echo '[';
     for ($i = 0; $i < strlen($path); $i++) {
-        echo $path[$i];
+        $path_arr[] = $path[$i];
     }
+    foreach ($path_arr as $space) {
+        switch ($space) {
+            case ('A'):
+                //echo "\e[1;34mA\e[0m";
+            case ('*'):
+                echo "\e[1;33m*\e[0m";
+            case ('p'):
+                echo "\e[1;32mp\e[0m";
+            default:
+                echo $space;
+        }
+    }
+
     echo "]\n";
 }
 
@@ -139,12 +137,24 @@ function path_view_str($path) {
  *  -p-1-!-*-3
  */
 function path_play($path, $player) {
+    $path_og = $path;
     while ($player['pos'] != count($path)) {
-        $path_str = implode('', $path);
-        $path_str = substr_replace($path_str, 'A', $player['pos'], 1);
-        path_view_str($path_str);
+        #path_view($path_og);
+        #$path_str = implode('', $path);
+        #echo $path_str[$player['pos']];
+        #$path_str = substr_replace($path_str, '\e[1;34mA\e[0m', $player['pos'], 1);
+        $past = array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m")[0];
+        if ($player['pos'] != 0) {
+            array_splice($path, $player['pos']-1, 1, "\e[1;33m" . $path_og[$player['pos']-1] . "\e[0m");
+            path_view($path);
+        }
+
+
+
+        #path_view($path);
         $player['pos']++;
     }
+
 };
 
 // 2 in 3 chance of space
@@ -185,7 +195,19 @@ $pre_def = [
 ];
 $path = explode(']', $pre_def[array_rand($pre_def)]);
 
-#path_view($path);
+$path = [
+    '-',
+    'p',
+    '-',
+    '1',
+    '-',
+    '!',
+    '-',
+    '*',
+    '-',
+    '3',
+];
+//path_view($path);
 
 /** Player stats
  *  Health - '3/10'
@@ -208,7 +230,7 @@ $path = [
     '-',
     '*',
     '-',
-    '3',
+    '3'
 ];
 
 $player = [
