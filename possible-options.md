@@ -2,7 +2,7 @@ Things that can happen on a turn (one iteration)
 
 roll key: shield, sword/3, skull/2, sword+skull/1
 
-Entity:
+## Entities
 1. Door - `|`
    * go through it
    * description
@@ -41,3 +41,12 @@ Entity:
    * until enemy dead:
       * show melee skill, weapon, health, enemy strength
       * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
+
+## Player stats to track and display
+* Health `3/10`
+  * display in red/orange/green based on percentage left
+* Gold - `02`/`23`
+  * display in yellow
+* Items
+  * list of weapons & potions
+  * blue `items` title, white bold items

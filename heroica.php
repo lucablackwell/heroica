@@ -149,6 +149,20 @@ $pre_def = [
 ];
 $path = explode(']', $pre_def[array_rand($pre_def)]);
 
+// testing path:
+// -p-1-!-*-3
+$path = [
+    '-',
+    'p',
+    '-',
+    '1',
+    '-',
+    '!',
+    '-',
+    '*',
+    '-',
+    '3',
+];
 path_view($path);
 
 /** Player stats
@@ -156,11 +170,15 @@ path_view($path);
  *    display in red/orange/green based on percentage left
  *  Gold - '02'/'23'
  *    display in yellow
- *  Stop for enemies and chests
- *  Shield
- *    Move up to 4 spaces / use Ranged skill
- *  Sword / 3
+ *  Items
+ *    weapons and potions: blue title, white bold items
  */
+
+$player = [
+    'health current' => 5,
+    'health max' => 5,
+    'gold' => 0
+];
 
 /** Dice Movement
  *  6 sides
