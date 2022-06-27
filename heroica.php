@@ -102,43 +102,6 @@ function path_view($path) {
     echo "]\n";
 }
 
-function path_view_str($path) {
-    echo '[';
-    foreach ($path as $space) {
-        switch ($space) {
-            case ('!'):
-                echo "\e[1;37m!\e[0m";
-                break;
-            case (':'):
-                echo "\e[1;37m:\e[0m";
-                break;
-            case ('|'):
-                echo "\e[1;37m|\e[0m";
-                break;
-            case ('*'):
-                echo "\e[1;33m*\e[0m";
-                break;
-            case ('p'):
-                echo "\e[1;32mp\e[0m";
-                break;
-            case ('1'):
-                echo "\e[1;31m1\e[0m";
-                break;
-            case ('2'):
-                echo "\e[1;31m2\e[0m";
-                break;
-            case ('3'):
-                echo "\e[1;31m3\e[0m";
-                break;
-            default:
-                echo "\e[1;37m-\e[0m";
-                break;
-        }
-    }
-
-    echo "]\n";
-}
-
 /** How to Render
  *  track player position
  *  track entities
