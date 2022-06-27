@@ -73,5 +73,8 @@ roll key: shield, sword/3, skull/2, sword+skull/1
             * add weapon to shop
             * add gold
             * show `?? sold for ?? gold`
-4. potions
-5. skills
+3. potions
+   * show current potions
+   * for each potion
+       * 
+4. skills
