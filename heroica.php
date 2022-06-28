@@ -148,104 +148,110 @@ function path_play($path, $player) {
                 break;
         }
     }
-    while ($player['pos'] != count($path)) {
-        if ($player['health current'] == 0) {
-            exit();
-        }
-        array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
-        if ($player['pos'] != 0) {
-            switch ($path_og[$player['pos']-1]) {
+    while ($player['health current'] > 0) {
+        while ($player['pos'] != count($path)) {
+            array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
+            if ($player['pos'] != 0) {
+                switch ($path_og[$player['pos']-1]) {
+                    case ('!'):
+                        $path[$player['pos']-1] = "\e[0;37m!\e[0m";
+                        $past = "\e[0;37m!\e[0m";
+                        break;
+                    case (':'):
+                        $past = "\e[0;37m:\e[0m";
+                        break;
+                    case ('|'):
+                        $past = "\e[0;37m|\e[0m";
+                        break;
+                    case ('*'):
+                        $path[$player['pos']-1] = "\e[0;33m*\e[0m";
+                        $past = "\e[0;33m*\e[0m";
+                        break;
+                    default:
+                        $past = "\e[0;37m-\e[0m";
+                        break;
+                }
+                array_splice($path, $player['pos']-1, 1, $past);
+            }
+            path_view($path);
+
+            // check for entities
+            switch ($player['pos']) {
                 case ('!'):
-                    $path[$player['pos']-1] = "\e[0;37m!\e[0m";
-                    $past = "\e[0;37m!\e[0m";
+                    door_puzzle();
                     break;
                 case (':'):
-                    $past = "\e[0;37m:\e[0m";
+                    door_branch();
                     break;
                 case ('|'):
-                    $past = "\e[0;37m|\e[0m";
+                    door();
                     break;
                 case ('*'):
-                    $path[$player['pos']-1] = "\e[0;33m*\e[0m";
-                    $past = "\e[0;33m*\e[0m";
+                    $player = chest($player);
+                    break;
+                case ('p'):
+                    $player = potion($player);
+                    break;
+                case ('1'):
+                    $player = fight($player, 1);
+                    break;
+                case ('2'):
+                    $player = fight($player, 2);
+                    break;
+                case ('3'):
+                    $player = fight($player, 3);
                     break;
                 default:
-                    $past = "\e[0;37m-\e[0m";
                     break;
             }
-            array_splice($path, $player['pos']-1, 1, $past);
-        }
-        path_view($path);
 
-        // check for entities
-        switch ($player['pos']) {
-            case ('!'):
-                door_puzzle();
-                break;
-            case (':'):
-                door_branch();
-                break;
-            case ('|'):
-                door();
-                break;
-            case ('*'):
-                $player = chest($player);
-                break;
-            case ('p'):
-                $player = potion($player);
-                break;
-            case ('1'):
-                $player = fight($player, 1);
-                break;
-            case ('2'):
-                $player = fight($player, 2);
-                break;
-            case ('3'):
-                $player = fight($player, 3);
-                break;
-            default:
-                break;
-        }
-
-        // check if already moving
-        if (!$moving) {
-            // display stats
-            echo " " . "\e[1;34mHealth: \e[0m";
-            //echo $player['health current'] / $player['health max'];
-            $health_div = $player['health current'] / $player['health max'];
-            if ($health_div > .66) {
-                echo "\e[1;32m";
-            } elseif ($health_div <= .66 && $health_div > .33) {
-                echo "\e[1;33m";
+            // check if already moving
+            if (!$moving) {
+                // display stats
+                show_stats($player, true);
+                $choice = show_choice(['move', 'weapons', 'potions ', 'shop']);
+                if ($choice == 'move') {
+                    $options = [
+                        3, 2, 2, 1, 1, 0
+                    ];
+                    $moving = $options[array_rand($options)];
+                    echo "\nMoving " . ($moving + 1) . " spaces\n";
+                } elseif ($choice == 'weapons') {
+                    exit('not yet implemented');
+                } elseif ($choice == 'potions') {
+                    exit('not yet implemented');
+                } elseif ($choice == 'shop') {
+                    exit('not yet implemented');
+                } else {
+                    exit('Something isn\'t right...');
+                }
             } else {
-                echo "\e[1;31m";
+                $moving--;
             }
-            echo $player['health current'] . "\e[0m/" . $player['health max'] . "\n";
-            $choice = show_choice(['move', 'weapons', 'potions ', 'shop']);
-            if ($choice == 'move') {
-                $options = [
-                    3, 2, 2, 1, 1, 0
-                ];
-                $moving = $options[array_rand($options)];
-                echo "\nMoving " . ($moving + 1) . " spaces\n";
-            } elseif ($choice == 'weapons') {
-                exit('not yet implemented');
-            } elseif ($choice == 'potions') {
-                exit('not yet implemented');
-            } elseif ($choice == 'shop') {
-                exit('not yet implemented');
-            } else {
-                exit('Something isn\'t right...');
-            }
-        } else {
-            $moving--;
+            $player['pos']++;
+            sleep(1);
         }
-
-
-        $player['pos']++;
-        sleep(1);
+        // congrats text, print statistics
     }
-    // congrats text, print statistics
+    echo "\e[1;31mGame over!\e[0m\n";
+    show_stats($player, false);
+}
+
+function show_stats($player, $show_health) {
+    if ($show_health) {
+        echo "\e[1;34mHealth\e[0m: ";
+        $health_div = $player['health current'] / $player['health max'];
+        if ($health_div > .66) {
+            echo "\e[1;32m";
+        } elseif ($health_div <= .66 && $health_div > .33) {
+            echo "\e[1;33m";
+        } else {
+            echo "\e[1;31m";
+        }
+        echo $player['health current'] . "\e[0m/" . $player['health max'] . "\e[1;36m | ";
+    }
+    echo "\e[1;34mGold\e[0m: \e[1;33m" . $player['gold'] . "\e[0m\e[1;36m | ";
+    echo "\e[1;34mSlain\e[0m: \e[1;31m" . $player['slain'] . "\e[0m\n";
 }
 
 function door_puzzle() {
