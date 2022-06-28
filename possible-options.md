@@ -60,6 +60,8 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 * Items
     * list of weapons & potions
     * blue `items` title, white bold items
+* Slain `01`
+    * display in red
 
 ## What player can do
 1. move
@@ -92,12 +94,14 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 4. skills - unneeded if bound with weapons?
 5. shop
     * show gold, shop weapons
- buy weapon
+    * buy weapon
        * if enough gold:
-       * remove gold
-       * remove weapon from shop
-       * add weapon to weapon inventory
-       * add related skill to skill inventory
-       * show `?? bought for ?? gold`
+         * remove gold
+         * remove weapon from shop
+         * add weapon to weapon inventory
+         * add related skill to skill inventory
+         * show `?? bought for ?? gold`
        * if not enough gold:
-       * show relevant message `Not enough gold!`
+         * show relevant message `Not enough gold!`
+6. stats
+   * show statistics

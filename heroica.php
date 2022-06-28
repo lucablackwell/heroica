@@ -149,6 +149,9 @@ function path_play($path, $player) {
         }
     }
     while ($player['pos'] != count($path)) {
+        if ($player['health current'] == 0) {
+            exit();
+        }
         array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
         if ($player['pos'] != 0) {
             switch ($path_og[$player['pos']-1]) {
@@ -206,6 +209,18 @@ function path_play($path, $player) {
 
         // check if already moving
         if (!$moving) {
+            // display stats
+            echo " " . "\e[1;34mHealth: \e[0m";
+            //echo $player['health current'] / $player['health max'];
+            $health_div = $player['health current'] / $player['health max'];
+            if ($health_div > .66) {
+                echo "\e[1;32m";
+            } elseif ($health_div <= .66 && $health_div > .33) {
+                echo "\e[1;33m";
+            } else {
+                echo "\e[1;31m";
+            }
+            echo $player['health current'] . "\e[0m/" . $player['health max'] . "\n";
             $choice = show_choice(['move', 'weapons', 'potions ', 'shop']);
             if ($choice == 'move') {
                 $options = [
