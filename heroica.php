@@ -210,7 +210,7 @@ function path_play($path, $player, $potions) {
             if (!$moving) {
                 // display stats
                 show_stats($player, true);
-                $choice = show_choice(['move', 'weapons', 'potions ', 'shop']);
+                $choice = show_choice(['move', 'weapons', 'potions', 'shop']);
                 if ($choice == 'move') {
                     $options = [
                         3, 2, 2, 1, 1, 0
@@ -221,7 +221,6 @@ function path_play($path, $player, $potions) {
                     exit('not yet implemented');
                 } elseif ($choice == 'potions') {
                     $player = potion_view($player);
-                    exit('not yet implemented');
                 } elseif ($choice == 'shop') {
                     exit('not yet implemented');
                 } else {
@@ -283,9 +282,12 @@ function potion_get($player, $potions) {
 
 function potion_view($player) {
     $potions = $player['inventory']['potions'];
+    echo "\nPotions:\n";
     foreach ($potions as $potion) {
-
+        echo "  \e[1;36m " . $potion[0] . "\e[0m: " . $potion[1] . "\n";
     }
+    $player['pos']--;
+    return $player;
 }
 
 function fight($player, $strength) {
