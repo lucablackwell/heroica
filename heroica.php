@@ -116,7 +116,7 @@ function path_view($path) {
  *  Grey for doors \e[1;37m
  */
 function path_play($path, $player) {
-    $moving = false;
+    $moving = 0;
     $path_og = $path;
     for ($i = 0; $i < count($path); $i++) {
         switch ($path[$i]) {
@@ -204,21 +204,29 @@ function path_play($path, $player) {
                 break;
         }
 
-        // OTHER LOGIC GOES HERE
-        $player['pos']++;
-        $choice = show_choice(['move', 'shop', 'potions ', 'skills']);
-        if ($choice == 'move') {
-            exit('teete');
-        } elseif ($choice == 'shop') {
-            exit('not yet implemented');
-        } elseif ($choice == 'potions') {
-            exit('not yet implemented');
-        } elseif ($choice == 'skills') {
-            exit('not yet implemented');
+        // check if already moving
+        if (!$moving) {
+            $choice = show_choice(['move', 'shop', 'potions ', 'skills']);
+            if ($choice == 'move') {
+                $moving = 9;
+            } elseif ($choice == 'shop') {
+                exit('not yet implemented');
+            } elseif ($choice == 'potions') {
+                exit('not yet implemented');
+            } elseif ($choice == 'skills') {
+                exit('not yet implemented');
+            } else {
+                exit('Something isn\'t right...');
+            }
         } else {
-            exit('Something isn\'t right...');
+            $moving--;
         }
+
+
+        $player['pos']++;
+        sleep(1);
     }
+    // congrats text, print statistics
 }
 
 function door_puzzle() {
@@ -372,6 +380,7 @@ $player = [
     'health current' => 5,
     'health max' => 5,
     'gold' => 0,
+    'slain' => 0,
     'inventory' => [
         'Short Sword' => 'Basic sword with no skill. Cannot be sold.'
     ]

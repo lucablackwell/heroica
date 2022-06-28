@@ -31,16 +31,22 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * until enemy dead:
      * show melee skill, weapon, health, enemy strength
      * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
+   * show `defeated ??` with optional `for ?? gold`
+   * add 1 to 'slain' count
 7. Mid Enemy - `2`
    * introduce enemy with 2 strength, random name
    * until enemy dead:
      * show melee skill, weapon, health, enemy strength
      * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
+   * show `defeated ??` with optional `for ?? gold`
+   * add 1 to 'slain' count
 8. Top Enemy - `3`
    * introduce enemy with 3 strength, random name and description
    * until enemy dead:
       * show melee skill, weapon, health, enemy strength
       * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
+   * show `defeated ??` with optional `for ?? gold`
+   * add 1 to 'slain' count
 
 ## Player stats to track and display
 * Health `3/10`
