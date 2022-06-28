@@ -76,5 +76,6 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 3. potions
    * show current potions
    * for each potion
-       * 
+     * description of effects
+     * option to use
 4. skills

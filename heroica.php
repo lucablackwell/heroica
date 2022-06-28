@@ -116,6 +116,7 @@ function path_view($path) {
  *  Grey for doors \e[1;37m
  */
 function path_play($path, $player) {
+    $moving = false;
     $path_og = $path;
     for ($i = 0; $i < count($path); $i++) {
         switch ($path[$i]) {
@@ -173,6 +174,36 @@ function path_play($path, $player) {
         }
         path_view($path);
 
+        // check for entities
+        switch ($player['pos']) {
+            case ('!'):
+                door_puzzle();
+                break;
+            case (':'):
+                door_branch();
+                break;
+            case ('|'):
+                door();
+                break;
+            case ('*'):
+                $player = chest($player);
+                break;
+            case ('p'):
+                $player = potion($player);
+                break;
+            case ('1'):
+                $player = fight($player, 1);
+                break;
+            case ('2'):
+                $player = fight($player, 2);
+                break;
+            case ('3'):
+                $player = fight($player, 3);
+                break;
+            default:
+                break;
+        }
+
         // OTHER LOGIC GOES HERE
         $player['pos']++;
         $choice = show_choice(['move', 'shop', 'potions ', 'skills']);
@@ -188,6 +219,27 @@ function path_play($path, $player) {
             exit('Something isn\'t right...');
         }
     }
+}
+
+function door_puzzle() {
+}
+
+function door_branch() {
+}
+
+function door() {
+}
+
+function chest($player) {
+    return $player;
+}
+
+function potion($player) {
+    return $player;
+}
+
+function fight($player, $strength) {
+    return $player;
 }
 
 # Show and take input for choices
@@ -319,7 +371,10 @@ $player = [
     'pos' => 0,
     'health current' => 5,
     'health max' => 5,
-    'gold' => 0
+    'gold' => 0,
+    'inventory' => [
+        'Short Sword' => 'Basic sword with no skill. Cannot be sold.'
+    ]
 ];
 
 path_play($path, $player);
