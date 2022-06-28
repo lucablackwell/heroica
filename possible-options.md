@@ -48,6 +48,10 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * show `defeated ??` with optional `for ?? gold`
    * add 1 to 'slain' count
 
+### Change fighting so each hit does one health, multiple turns per enemy depending on their strength?
+### `?? hit you gruesomely/in a fit of rage` / `you delivered a gruesome/impactful blow to ??` 
+
+
 ## Player stats to track and display
 * Health `3/10`
     * display in red/orange/green based on percentage left
@@ -59,23 +63,24 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 
 ## What player can do
 1. move
+    * roll: 4, 3, 2, 1 
     * show dice roll - function for rolling?
     * show outcome
     * show progression - flag for movement that ignores menus
     * show `moved ?? spaces`
-2. shop
-    * show gold, current weapons
+2. weapons
+    * show gold, weapons in inventory
     * for each weapon
-        1. buy weapon
-            * if enough gold:
-                * remove gold
-                * remove weapon from shop
-                * add weapon to inventory
-                * show `?? bought for ?? gold`
-            * if not enough gold:
-                * show relevant message `Not enough gold!`
+        1. inspect weapon
+           * show name, description, skill
+           * if skill is ranged:
+             1. use skill
+                * logic depending on skill - if requires enemies, warn 
+                * show `brandishing your ??, you summon the skill ??`
+                * logic and description of effects of skill
         2. sell weapon
-            * remove weapon from inventory
+            * remove related skill from skill inventory
+            * remove weapon from weapon inventory
             * add weapon to shop
             * add gold
             * show `?? sold for ?? gold`
@@ -84,4 +89,15 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * for each potion
      * description of effects
      * option to use
-4. skills
+4. skills - unneeded if bound with weapons?
+5. shop
+    * show gold, shop weapons
+ buy weapon
+       * if enough gold:
+       * remove gold
+       * remove weapon from shop
+       * add weapon to weapon inventory
+       * add related skill to skill inventory
+       * show `?? bought for ?? gold`
+       * if not enough gold:
+       * show relevant message `Not enough gold!`

@@ -206,14 +206,14 @@ function path_play($path, $player) {
 
         // check if already moving
         if (!$moving) {
-            $choice = show_choice(['move', 'shop', 'potions ', 'skills']);
+            $choice = show_choice(['move', 'weapons', 'potions ', 'shop']);
             if ($choice == 'move') {
-                $moving = 9;
-            } elseif ($choice == 'shop') {
+                $moving = roll();
+            } elseif ($choice == 'weapons') {
                 exit('not yet implemented');
             } elseif ($choice == 'potions') {
                 exit('not yet implemented');
-            } elseif ($choice == 'skills') {
+            } elseif ($choice == 'shop') {
                 exit('not yet implemented');
             } else {
                 exit('Something isn\'t right...');
@@ -227,6 +227,14 @@ function path_play($path, $player) {
         sleep(1);
     }
     // congrats text, print statistics
+}
+
+function roll() {
+    // 1 shield
+    // 2 sword/3
+    // 2 skull/2
+    // 1 sword+skull/1
+
 }
 
 function door_puzzle() {
@@ -382,7 +390,14 @@ $player = [
     'gold' => 0,
     'slain' => 0,
     'inventory' => [
-        'Short Sword' => 'Basic sword with no skill. Cannot be sold.'
+        'weapons' => [
+            // name => description, skill, price
+            'Short Sword' => ['Basic sword with no skill. Cannot be sold.', null, null]
+        ],
+        'potions' => [
+            // name => description
+            'Flask of Water' => 'A flask filled with grey water. Despite the odd taste, it keeps you hydrated. Cannot be sold.'
+        ]
     ]
 ];
 
