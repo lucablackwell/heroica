@@ -208,7 +208,11 @@ function path_play($path, $player) {
         if (!$moving) {
             $choice = show_choice(['move', 'weapons', 'potions ', 'shop']);
             if ($choice == 'move') {
-                $moving = roll();
+                $options = [
+                    3, 2, 2, 1, 1, 0
+                ];
+                $moving = $options[array_rand($options)];
+                echo "\nMoving " . ($moving + 1) . " spaces\n";
             } elseif ($choice == 'weapons') {
                 exit('not yet implemented');
             } elseif ($choice == 'potions') {
@@ -227,14 +231,6 @@ function path_play($path, $player) {
         sleep(1);
     }
     // congrats text, print statistics
-}
-
-function roll() {
-    // 1 shield
-    // 2 sword/3
-    // 2 skull/2
-    // 1 sword+skull/1
-
 }
 
 function door_puzzle() {
