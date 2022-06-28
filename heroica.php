@@ -432,16 +432,16 @@ $player = [
         ],
         'potions' => [
             // name => description
-            ['Flask of Water', 'A flask filled with grey water. Despite the odd taste, it keeps you hydrated. Cannot be sold.']
+            ['Flask of Water', "A flask filled with grey water. Despite the odd taste, it keeps you hydrated. \e[0;33mCannot be sold.\e[0m"]
         ]
     ]
 ];
 
 $potions = [
     // name, description
-    ['Chalice of Vitality', 'Restore your health to full'],
-    ['Life Vial', 'Restore your health halfway and double your maximum'],
-    ['Stealth Ointment', 'Sneak past any enemies for five spaces, stealing 1 gold from each of them']
+    ['Chalice of Vitality', "The chalice feels cold in your hands. \e[0;33mAllows you to restore your health to full.\e[0m"],
+    ['Life Vial', "A thin vial that you hold gently. It is filled with a red liquid. \e[0;33mAllows you to restore your health halfway and double your maximum.\e[0m"],
+    ['Stealth Ointment', "The ointment has a strange texture, and an even stranger smell. \e[0;33mAllows you to sneak for five spaces, stealing 1 gold from each enemy you pass.\e[0m"]
 ];
 
 path_play($path, $player, $potions);
