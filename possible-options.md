@@ -15,14 +15,12 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * roll: 2 gold, 1 gold, back a space, 1 gold and back a space
 5. Potion - `p`
    * available potions:
-     1. Life
-        * restore 2 health
-     2. Luck
-        * re-roll the dice
-     3. Speed
-        * move up to 4 extra spaces
-     4. Strength
-        * defeat an adjacent monster
+     1. Vitality
+        * Restore your health to full
+     2. Life
+        * Restore your health halfway and double your maximum
+     3. Stealth
+        * Sneak past any enemies for five spaces, stealing 1 gold from each of them
    * generate which to pick up (based on remaining) (if all used, start over)
    * show text about adding to inventory
      * description of specific potion
@@ -91,17 +89,16 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * for each potion
      * description of effects
      * option to use
-4. skills - unneeded if bound with weapons?
-5. shop
-    * show gold, shop weapons
-    * buy weapon
-       * if enough gold:
-         * remove gold
-         * remove weapon from shop
-         * add weapon to weapon inventory
-         * add related skill to skill inventory
-         * show `?? bought for ?? gold`
-       * if not enough gold:
-         * show relevant message `Not enough gold!`
-6. stats
+4. shop
+   * show gold, shop weapons
+   * buy weapon
+      * if enough gold:
+        * remove gold
+        * remove weapon from shop
+        * add weapon to weapon inventory
+        * add related skill to skill inventory
+        * show `?? bought for ?? gold`
+      * if not enough gold:
+        * show relevant message `Not enough gold!`
+5. stats
    * show statistics

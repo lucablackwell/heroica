@@ -115,7 +115,7 @@ function path_view($path) {
  *  Light green for potions \e[1;32m
  *  Grey for doors \e[1;37m
  */
-function path_play($path, $player) {
+function path_play($path, $player, $potions) {
     $moving = 0;
     $path_og = $path;
     for ($i = 0; $i < count($path); $i++) {
@@ -150,6 +150,36 @@ function path_play($path, $player) {
     }
     while ($player['health current'] > 0) {
         while ($player['pos'] != count($path)) {
+            // check for entities
+            // need to be colour versions
+            switch ($path[$player['pos']]) {
+                case ("\e[1;37m!\e[0m"):
+                    door_puzzle();
+                    break;
+                case ("\e[1;37m:\e[0m"):
+                    door_branch();
+                    break;
+                case ("\e[1;37m|\e[0m"):
+                    door();
+                    break;
+                case ("\e[1;33m*\e[0m"):
+                    $player = chest($player);
+                    break;
+                case ("\e[1;32mp\e[0m"):
+                    $player = potion_get($player, $potions);
+                    break;
+                case ("\e[1;31m1\e[0m"):
+                    $player = fight($player, 1);
+                    break;
+                case ("\e[1;31m2\e[0m"):
+                    $player = fight($player, 2);
+                    break;
+                case ("\e[1;31m3\e[0m"):
+                    $player = fight($player, 3);
+                    break;
+                default:
+                    break;
+            }
             array_splice($path, $player['pos'], 1, "\e[1;34mA\e[0m");
             if ($player['pos'] != 0) {
                 switch ($path_og[$player['pos']-1]) {
@@ -175,35 +205,6 @@ function path_play($path, $player) {
             }
             path_view($path);
 
-            // check for entities
-            switch ($player['pos']) {
-                case ('!'):
-                    door_puzzle();
-                    break;
-                case (':'):
-                    door_branch();
-                    break;
-                case ('|'):
-                    door();
-                    break;
-                case ('*'):
-                    $player = chest($player);
-                    break;
-                case ('p'):
-                    $player = potion($player);
-                    break;
-                case ('1'):
-                    $player = fight($player, 1);
-                    break;
-                case ('2'):
-                    $player = fight($player, 2);
-                    break;
-                case ('3'):
-                    $player = fight($player, 3);
-                    break;
-                default:
-                    break;
-            }
 
             // check if already moving
             if (!$moving) {
@@ -215,10 +216,11 @@ function path_play($path, $player) {
                         3, 2, 2, 1, 1, 0
                     ];
                     $moving = $options[array_rand($options)];
-                    echo "\nMoving " . ($moving + 1) . " spaces\n";
+                    echo "Moving " . ($moving + 1) . " spaces\n";
                 } elseif ($choice == 'weapons') {
                     exit('not yet implemented');
                 } elseif ($choice == 'potions') {
+                    $player = potion_view($player);
                     exit('not yet implemented');
                 } elseif ($choice == 'shop') {
                     exit('not yet implemented');
@@ -236,7 +238,6 @@ function path_play($path, $player) {
     echo "\e[1;31mGame over!\e[0m\n";
     show_stats($player, false);
 }
-
 function show_stats($player, $show_health) {
     if ($show_health) {
         echo "\e[1;34mHealth\e[0m: ";
@@ -267,8 +268,24 @@ function chest($player) {
     return $player;
 }
 
-function potion($player) {
+function potion_get($player, $potions) {
+    $potion_flag = false;
+    while (!$potion_flag) {
+        $potion = $potions[array_rand($potions)];
+        if (!array_key_exists($potion[0], $player['inventory']['potions'])) {
+            $potion_flag = true;
+        }
+    }
+    echo "Picked up a \e[1;36m" . $potion[0] . "\e[0m!\n";
+    $player['inventory']['potions'][] = $potion;
     return $player;
+}
+
+function potion_view($player) {
+    $potions = $player['inventory']['potions'];
+    foreach ($potions as $potion) {
+
+    }
 }
 
 function fight($player, $strength) {
@@ -389,10 +406,10 @@ $path = explode(']', $pre_def[array_rand($pre_def)]);
 // -p-1-!-*-3
 $path = [
     '-',
+    '|',
     'p',
     '-',
     '1',
-    '-',
     '!',
     '-',
     '*',
@@ -413,12 +430,19 @@ $player = [
         ],
         'potions' => [
             // name => description
-            'Flask of Water' => 'A flask filled with grey water. Despite the odd taste, it keeps you hydrated. Cannot be sold.'
+            ['Flask of Water', 'A flask filled with grey water. Despite the odd taste, it keeps you hydrated. Cannot be sold.']
         ]
     ]
 ];
 
-path_play($path, $player);
+$potions = [
+    // name, description
+    ['Chalice of Vitality', 'Restore your health to full'],
+    ['Life Vial', 'Restore your health halfway and double your maximum'],
+    ['Stealth Ointment', 'Sneak past any enemies for five spaces, stealing 1 gold from each of them']
+];
+
+path_play($path, $player, $potions);
 
 /** Dice Fighting
  *  6 sides
