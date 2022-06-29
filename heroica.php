@@ -261,6 +261,7 @@ function door_branch() {
 }
 
 function door() {
+    echo "\ndescription goes here\n";
 }
 
 function chest($player) {
@@ -281,10 +282,14 @@ function potion_get($player, $potions) {
 }
 
 function potion_view($player) {
-    $potions = $player['inventory']['potions'];
-    echo "\nPotions:\n";
-    foreach ($potions as $potion) {
-        echo "  \e[1;36m " . $potion[0] . "\e[0m: " . $potion[1] . "\n";
+    if (empty($player['inventory']['potions'])) {
+        echo "\n\e[1;36mNo potions to show!\e[0m\n";
+    } else {
+        $potions = $player['inventory']['potions'];
+        echo "\nPotions:\n";
+        foreach ($potions as $potion) {
+            echo "  \e[1;36m " . $potion[0] . "\e[0m: " . $potion[1] . "\n";
+        }
     }
     $player['pos']--;
     return $player;
@@ -432,7 +437,7 @@ $player = [
         ],
         'potions' => [
             // name => description
-            ['Flask of Water', "A flask filled with grey water. Despite the odd taste, it keeps you hydrated. \e[0;33mCannot be sold.\e[0m"]
+            //['Flask of Water', "A flask filled with grey water. Despite the odd taste, it keeps you hydrated. \e[0;33mCannot be sold.\e[0m"]
         ]
     ]
 ];
@@ -441,7 +446,7 @@ $potions = [
     // name, description
     ['Chalice of Vitality', "The chalice feels cold in your hands. \e[0;33mAllows you to restore your health to full.\e[0m"],
     ['Life Vial', "A thin vial that you hold gently. It is filled with a red liquid. \e[0;33mAllows you to restore your health halfway and double your maximum.\e[0m"],
-    ['Stealth Ointment', "The ointment has a strange texture, and an even stranger smell. \e[0;33mAllows you to sneak for five spaces, stealing 1 gold from each enemy you pass.\e[0m"]
+    ['Stealth Ointment', "The ointment has a strange texture and smell. \e[0;33mAllows you to sneak for five spaces, stealing 1 gold from each enemy you pass.\e[0m"]
 ];
 
 path_play($path, $player, $potions);
