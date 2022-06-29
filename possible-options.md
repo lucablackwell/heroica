@@ -102,3 +102,15 @@ roll key: shield, sword/3, skull/2, sword+skull/1
         * show relevant message `Not enough gold!`
 5. stats
    * show statistics
+
+
+## Colours - close off with \e[0m
+* Red for enemies \e[1;31m
+* Blue for player \e[1;34m
+* Yellow for chests \e[1;33m
+* Light green for potions \e[1;32m
+* Grey for doors \e[1;37m
+* Cyan for system stuff \e[1;36m
+* Faded grey for used doors and spaces \e[0;37m
+* Faded yellow for used chests \e[0;33m
+

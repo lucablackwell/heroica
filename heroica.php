@@ -93,6 +93,48 @@ function path_gen_replace($path_length, $entities) {
     return explode(' ', $path);
 }
 
+/**
+ * Red for enemies \e[1;31m
+ * Blue for player \e[1;34m
+ * Yellow for chests \e[1;33m
+ * Light green for potions \e[1;32m
+ * Grey for doors \e[1;37m
+ * Cyan for system stuff \e[1;36m
+ * Faded grey for used doors and spaces \e[0;37m
+ * Faded yellow for used chests \e[0;33m
+ */
+function red($text) {
+    return "\e[1;31m$text\e[0m";
+}
+
+function blue($text) {
+    return "\e[1;34m$text\e[0m";
+}
+
+function yellow($text) {
+    return "\e[1;33m$text\e[0m";
+}
+
+function green($text) {
+    return "\e[1;32m$text\e[0m";
+}
+
+function grey($text) {
+    return "\e[1;37m$text\e[0m";
+}
+
+function cyan($text) {
+    return "\e[1;36m$text\e[0m";
+}
+
+function grey_faded($text) {
+    return "\e[0;37m$text\e[0m";
+}
+
+function yellow_faded($text) {
+    return "\e[0;33m$text\e[0m";
+}
+
 function path_view($path) {
     echo '[';
     foreach ($path as $space) {
