@@ -2,3 +2,4 @@ PR#1 - Render Loop - 2hrs 32min
 PR#2 - Render Replace - 4hrs 56min
 PR#3 - Stats, View & Custom Paths - 3hrs 53min
 PR#4 - Choices & Movement (& Potions)- 5hrs 7min
+PR#5 - Colour Functions -
