@@ -258,7 +258,7 @@ function path_play($path, $player, $potions) {
                         3, 2, 2, 1, 1, 0
                     ];
                     $moving = $options[array_rand($options)];
-                    echo "Moving " . ($moving + 1) . " spaces\n";
+                    echo 'Moving ' . ($moving + 1) . " spaces\n";
                 } elseif ($choice == 'weapons') {
                     exit('not yet implemented');
                 } elseif ($choice == 'potions') {
@@ -290,9 +290,9 @@ function show_stats($player, $show_health) {
         } else {
             echo red($player['health current']);
         }
-        echo '/' . $player['health max'] . cyan(" | ");
+        echo '/' . $player['health max'] . cyan(' | ');
     }
-    echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(" | ");
+    echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(' | ');
     echo blue('Slain') . ': ' . red($player['slain']) . "\n";
 }
 
