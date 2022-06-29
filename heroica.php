@@ -300,6 +300,7 @@ function door_puzzle() {
 }
 
 function door_branch() {
+    // this requires path gen to be fully refined, which it currently isn't
 }
 
 function door() {
