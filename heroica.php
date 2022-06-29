@@ -325,7 +325,7 @@ function path_play($path, $player, $potions) {
                     door();
                     break;
                 case (yellow('*')):
-                    $player = chest($player);
+                    $player = chest($player, $path);
                     break;
                 case (green('p')):
                     $player = potion_get($player, $potions);
@@ -424,7 +424,7 @@ function show_stats($player, $show_health) {
 }
 
 function door_puzzle() {
-    mastermind(9, 6, false);
+    //mastermind(9, 6, false);
 }
 
 function door_branch() {
@@ -441,7 +441,33 @@ function door() {
     sleep(2);
 }
 
-function chest($player) {
+function chest($player, $path) {
+    echo cyan("\nYou come across a rusted chest.\n");
+    sleep(1);
+
+    $options = [
+        '2g', '2g', '1g', '1g', 'back', '1g back'
+    ];
+    $outcome = $options[array_rand($options)];
+
+    if ($outcome == '2g') {
+        echo cyan('Heaving it open, you find ') . yellow('2 gold!');
+        $player['gold']++;
+        $player['gold']++;
+    } elseif ($outcome == '1g') {
+        echo cyan('Heaving it open, you find ') . yellow('1 gold!');
+        $player['gold']++;
+    } elseif ($outcome == 'back') {
+        echo cyan('Heaving it open, you find that the chest is a trap! As you narrowly avoid certain death, ') . red('you move back one space.');
+        $player['pos']--;
+        $path[$player['pos']+1] = yellow_faded('*');
+    } elseif ($outcome == '1g back') {
+        echo cyan('Heaving it open, you find that the chest is a trap! As you narrowly avoid certain death, ') . red('you move back one space.') . cyan("\nWhoever laid the trap was clumsy: you find ") . yellow('2 gold!');
+        $player['pos']--;
+        $path[$player['pos']+1] = yellow_faded('*');
+        $player['gold']++;
+    }
+    $player['pos']--;
     return $player;
 }
 
@@ -592,7 +618,7 @@ $path = [
     '-',
     '|',
     'p',
-    '-',
+    '*',
     '1',
     '!',
     '-',
