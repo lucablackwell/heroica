@@ -256,7 +256,7 @@ function mastermind($limit, $guess_max, $hard) {
             }
             echo "\n";
         }
-        if ($guess_total == $guess_max) {
+        if ($guess_total == $guess_max && ($correct == 4 || implode($input_arr) == implode($combo))) {
             echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\n");
         }
     }
@@ -377,7 +377,12 @@ function path_play($path, $player, $potions) {
                         3, 2, 2, 1, 1, 0
                     ];
                     $moving = $options[array_rand($options)];
-                    echo 'Moving ' . ($moving + 1) . " spaces\n";
+                    if ($moving + 1 == 1) {
+                        echo 'Moving ' . ($moving + 1) . " space\n";
+                    } else {
+                        echo 'Moving ' . ($moving + 1) . " spaces\n";
+                    }
+
                 } elseif ($choice == 'weapons') {
                     exit('not yet implemented');
                 } elseif ($choice == 'potions') {
@@ -393,8 +398,9 @@ function path_play($path, $player, $potions) {
             $player['pos']++;
             sleep(1);
         }
-        echo green("Congratulations!\n");
+        echo green("Congratulations! You made it through with:\n");
         show_stats($player, true);
+        exit();
     }
     echo red("Game over!\n");
     show_stats($player, false);
