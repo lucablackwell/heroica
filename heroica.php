@@ -143,115 +143,124 @@ function path_view($path) {
     echo "]\n";
 }
 
-function mastermind() {
-    $combo = [];
-    $limit = 9; // Six colours in og mastermind
-    $guess_max = 12; // Twelve guesses in og mastermind (hard)
-    $hard = false;
-    echo "\nRange: 0-".($limit). "\nGuesses: $guess_max\n";
+function mastermind($limit, $guess_max, $hard) {
+    echo cyan("You come across a door with an ancient mechanism.\nYou'll need to input the correct combination of 4 numbers to proceed.\n");
+    sleep(2);
+    echo cyan("There are " . $limit . " numbers to choose from, including 0.\n");
+    sleep(2);
+    echo cyan("Studying the mechanism, you see you'll have " . $guess_max . " attempts before the combination resets.\n");
+    sleep(2);
+    echo "Enter 4 numbers to input them into the mechanism.\n";
 
-    // For the remaining, add a random one to the combo
-    $remaining = [];
-    for ($i = 0; $i <= $limit; $i++) {
-        $remaining[] = $i;
-    }
-    for ($i = 0; $i < 4; $i++) {
-        $rand = array_rand($remaining);
-        $combo[] = $rand;
-        unset($remaining[array_search($rand, $remaining)]);
-    }
+    $beaten = false;
 
-    $guess_total = 0;
-    $win = false;
-    while (!$win && $guess_total < $guess_max) {
-        $guess_total += 1;
-        $input = readline();
-        $sanitised = false;
-        while (!$sanitised) {
-            // If there are more or less than 4 characters
-            if (strlen($input) != 4) {
-                echo "Not 4 characters.\n";
-                $input = readline();
-                // If there are letters
-            } elseif (preg_match('/[a-z]/', $input)) {
-                echo "No letters.\n";
-                $input = readline();
-                // If there are symbols
-            } elseif (preg_match('/[^\p{L}\d\s@]/u', $input)) {
-                echo "No symbols.\n";
-                $input = readline();
-                // If there are only numbers
-            } elseif (preg_match('/[0-9]/', $input)) {
-                $low_enough = true;
-                foreach (str_split($input) as $num) {
-                    if ($num > $limit) {
-                        $low_enough = false;
-                    }
-                }
-                // If any of the numbers are too high
-                if (!$low_enough) {
-                    echo "Lower than ".($limit+1)."\n";
+    while (!$beaten) {
+        // For the remaining, add a random one to the combo
+        $combo = [];
+        $remaining = [];
+        for ($i = 0; $i <= $limit; $i++) {
+            $remaining[] = $i;
+        }
+        for ($i = 0; $i < 4; $i++) {
+            $rand = array_rand($remaining);
+            $combo[] = $rand;
+            unset($remaining[array_search($rand, $remaining)]);
+        }
+
+        $guess_total = 0;
+        $win = false;
+        while (!$win && $guess_total < $guess_max) {
+            $guess_total += 1;
+            $input = readline();
+            $sanitised = false;
+            while (!$sanitised) {
+                // If there are more or less than 4 characters
+                if (strlen($input) != 4) {
+                    echo "Not 4 characters.\n";
                     $input = readline();
-                }
-                // If there are duplicates
-                if (strlen(count_chars($input, 3)) != 4) {
-                    echo "No duplicates.\n";
+                    // If there are letters
+                } elseif (preg_match('/[a-z]/', $input)) {
+                    echo "No letters.\n";
                     $input = readline();
-                }
-                if ($low_enough && strlen(count_chars($input, 3)) == 4) {
-                    $sanitised = true;
-                }
-            }
-        }
-
-        $input_arr = str_split($input);
-
-        $correct = 0;
-        $half = 0;
-        $wrong = 0;
-        if ($hard) {
-            for ($i = 0; $i < count($input_arr); $i++) {
-                // If at least right number in any place
-                if (in_array($input_arr[$i], $combo)) {
-                    // If right place
-                    if ($input_arr[$i] == $combo[$i]) {
-                        $correct += 1;
-                    } else {
-                        $half += 1;
+                    // If there are symbols
+                } elseif (preg_match('/[^\p{L}\d\s@]/u', $input)) {
+                    echo "No symbols.\n";
+                    $input = readline();
+                    // If there are only numbers
+                } elseif (preg_match('/[0-9]/', $input)) {
+                    $low_enough = true;
+                    foreach (str_split($input) as $num) {
+                        if ($num > $limit) {
+                            $low_enough = false;
+                        }
                     }
-                } else {
-                    $wrong += 1;
-                }
-            }
-            echo "      " . green($correct) . " " . yellow($half) . " " . red($wrong);
-        } else {
-            for ($i = 0; $i < count($input_arr); $i++) {
-                // If at least right number in any place
-                if (in_array($input_arr[$i], $combo)) {
-                    // If right place
-                    if ($input_arr[$i] == $combo[$i]) {
-                        $correct += 1;
-                        echo green($input_arr[$i]);
-                    } else {
-                        echo yellow($input_arr[$i]);
+                    // If any of the numbers are too high
+                    if (!$low_enough) {
+                        echo "Lower than ".($limit+1)."\n";
+                        $input = readline();
                     }
-                } else {
-                    echo red($input_arr[$i]);
+                    // If there are duplicates
+                    if (strlen(count_chars($input, 3)) != 4) {
+                        echo "No duplicates.\n";
+                        $input = readline();
+                    }
+                    if ($low_enough && strlen(count_chars($input, 3)) == 4) {
+                        $sanitised = true;
+                    }
                 }
             }
-        }
 
-        echo "  Guess $guess_total";
-        // If all correct
-        if ($correct == 4) {
-            echo "\nYou win!\n";
-            $win = true;
+            $input_arr = str_split($input);
+
+            $correct = 0;
+            $half = 0;
+            $wrong = 0;
+            if ($hard) {
+                for ($i = 0; $i < count($input_arr); $i++) {
+                    // If at least right number in any place
+                    if (in_array($input_arr[$i], $combo)) {
+                        // If right place
+                        if ($input_arr[$i] == $combo[$i]) {
+                            $correct += 1;
+                        } else {
+                            $half += 1;
+                        }
+                    } else {
+                        $wrong += 1;
+                    }
+                }
+                echo "      " . green($correct) . " " . yellow($half) . " " . red($wrong);
+            } else {
+                for ($i = 0; $i < count($input_arr); $i++) {
+                    // If at least right number in any place
+                    if (in_array($input_arr[$i], $combo)) {
+                        // If right place
+                        if ($input_arr[$i] == $combo[$i]) {
+                            $correct += 1;
+                            echo green($input_arr[$i]);
+                        } else {
+                            echo yellow($input_arr[$i]);
+                        }
+                    } else {
+                        echo red($input_arr[$i]);
+                    }
+                }
+            }
+            echo "  Guess $guess_total";
+            // If all correct
+            if ($correct == 4 || implode($input_arr) == implode($combo)) {
+                echo cyan("\nDust falls as the ancient lock opens.\n");
+                sleep(2);
+                $win = true;
+                $beaten = true;
+            }
+            echo "\n";
         }
-        echo "\n";
+        if (!$win && $guess_total == $guess_max) {
+            echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\n");
+        }
     }
-    if (!$win && $guess_total == $guess_max) {
-        echo "Too many guesses.\n";
-    }
+
 }
 
 /** How to Render
@@ -390,6 +399,7 @@ function path_play($path, $player, $potions) {
     echo red("Game over!\n");
     show_stats($player, false);
 }
+
 function show_stats($player, $show_health) {
     if ($show_health) {
         echo blue('Health') . ': ';
@@ -408,7 +418,7 @@ function show_stats($player, $show_health) {
 }
 
 function door_puzzle() {
-    mastermind();
+    mastermind(9, 6, false);
 }
 
 function door_branch() {
