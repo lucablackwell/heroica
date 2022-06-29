@@ -168,8 +168,9 @@ function mastermind($limit, $guess_max, $hard) {
         }
 
         $guess_total = 0;
-        $win = false;
-        while (!$win && $guess_total < $guess_max) {
+        $input_arr = [];
+        $correct = 0;
+        while (($correct != 4 || implode($input_arr) != implode($combo)) && $guess_total < $guess_max) {
             $guess_total += 1;
             $input = readline();
             $sanitised = false;
@@ -249,14 +250,13 @@ function mastermind($limit, $guess_max, $hard) {
             echo "  Guess $guess_total";
             // If all correct
             if ($correct == 4 || implode($input_arr) == implode($combo)) {
-                echo cyan("\nDust falls as the ancient lock opens.\n");
+                echo cyan("\nDust falls as the ancient lock opens.");
                 sleep(2);
-                $win = true;
                 $beaten = true;
             }
             echo "\n";
         }
-        if (!$win && $guess_total == $guess_max) {
+        if ($guess_total == $guess_max) {
             echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\n");
         }
     }
