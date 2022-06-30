@@ -11,6 +11,10 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * go through it once complete
 3. Branching door - `:` - white bold
    * generate other paths with varying enemies and puzzles
+   *      [----|--*-1---p---:----]
+   *                        [-3----*---!-] one top level enemy for okay reward
+   *                        [-2-2--*-p-!-] two mid level enemies for good reward - more chances for hits taken
+   *                        [-!-!--*---!-] two puzzles for okay reward - no combat
 4. Chest - `*`
    * roll: 2 gold, 1 gold, back a space, 1 gold and back a space
 5. Potion - `p`
@@ -48,6 +52,9 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 
 ### Change fighting so each hit does one health, multiple turns per enemy depending on their strength?
 ### `?? hit you gruesomely/in a fit of rage` / `you delivered a gruesome/impactful blow to ??` 
+
+### Shop between levels? - save stats to file
+###  Way to find health upgrades - chests, potion or certain amount of enemies killed?
 
 
 ## Player stats to track and display
@@ -100,9 +107,6 @@ roll key: shield, sword/3, skull/2, sword+skull/1
         * show `?? bought for ?? gold`
       * if not enough gold:
         * show relevant message `Not enough gold!`
-5. stats
-   * show statistics
-
 
 ## Colours - close off with \e[0m
 * Red for enemies \e[1;31m
@@ -114,3 +118,16 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 * Faded grey for used doors and spaces \e[0;37m
 * Faded yellow for used chests \e[0;33m
 
+## Weapons / Skills
+* Axe
+  * Melee: defeat all adjacent monsters
+* Wand
+  * Ranged: defeat a monster up to 3 spaces away
+* Staff
+  * Ranged: restore up to 2 health
+* Bow
+  * Ranged: defeat all monsters up to 5 spaces away (costs 1 health)
+* Dagger
+  * Melee: defeat the monster and take 1 gold from the store
+* Sword
+  * Melee: defeat the monster and take 2 gold from the store (costs 1 health)
