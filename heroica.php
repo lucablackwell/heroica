@@ -107,32 +107,32 @@ function red($text) {
     return "\e[1;31m$text\e[0m";
 }
 
-function blue($text) {
-    return "\e[1;34m$text\e[0m";
+function green($text) {
+    return "\e[1;32m$text\e[0m";
 }
 
 function yellow($text) {
     return "\e[1;33m$text\e[0m";
 }
 
-function green($text) {
-    return "\e[1;32m$text\e[0m";
-}
-
-function grey($text) {
-    return "\e[1;37m$text\e[0m";
+function blue($text) {
+    return "\e[1;34m$text\e[0m";
 }
 
 function cyan($text) {
     return "\e[1;36m$text\e[0m";
 }
 
-function grey_faded($text) {
-    return "\e[0;37m$text\e[0m";
+function grey($text) {
+    return "\e[1;37m$text\e[0m";
 }
 
 function yellow_faded($text) {
     return "\e[0;33m$text\e[0m";
+}
+
+function grey_faded($text) {
+    return "\e[0;37m$text\e[0m";
 }
 
 function path_view($path) {
@@ -141,6 +141,126 @@ function path_view($path) {
         echo $space;
     }
     echo "]\n";
+}
+
+function mastermind($limit, $attempt_max, $hard) {
+    echo cyan("You come across a door with an ancient mechanism.\nYou'll need to input the correct combination of 4 numbers to proceed.\n");
+    sleep(2);
+    echo cyan("You can only use the numbers from 0-" . $limit . ", including 0 itself.\n");
+    sleep(2);
+    echo cyan("Studying the mechanism, you see that you'll have " . $attempt_max . " attempts before the combination resets.\n");
+    sleep(2);
+    echo "Enter 4 numbers to input them into the mechanism.\n";
+
+    $beaten = false;
+
+    while (!$beaten) {
+        // For the remaining, add a random one to the combo
+        $combo = [];
+        $remaining = [];
+        for ($i = 0; $i <= $limit; $i++) {
+            $remaining[] = $i;
+        }
+        for ($i = 0; $i < 4; $i++) {
+            $rand = array_rand($remaining);
+            $combo[] = $rand;
+            unset($remaining[array_search($rand, $remaining)]);
+        }
+
+        $attempt_total = 0;
+        $input_arr = [];
+        $correct = 0;
+        while (($correct != 4 || implode($input_arr) != implode($combo)) && $attempt_total < $attempt_max) {
+            $attempt_total += 1;
+            $input = readline();
+            $sanitised = false;
+            while (!$sanitised) {
+                // If there are more or less than 4 characters
+                if (strlen($input) != 4) {
+                    echo "The ancient mechanism only has 4 spaces.\n";
+                    $input = readline();
+                    // If there are letters
+                } elseif (preg_match('/[a-z]/', $input)) {
+                    echo "Only numbers are usable to unlock this mechanism.\n";
+                    $input = readline();
+                    // If there are symbols
+                } elseif (preg_match('/[^\p{L}\d\s@]/u', $input)) {
+                    echo "Only numbers are usable to unlock this mechanism.\n";
+                    $input = readline();
+                    // If there are only numbers
+                } elseif (preg_match('/[0-9]/', $input)) {
+                    $low_enough = true;
+                    foreach (str_split($input) as $num) {
+                        if ($num > $limit) {
+                            $low_enough = false;
+                        }
+                    }
+                    // If any of the numbers are too high
+                    if (!$low_enough) {
+                        echo "The given numbers only go up to " . ($limit) . "!\n";
+                        $input = readline();
+                    }
+                    // If there are duplicates
+                    if (strlen(count_chars($input, 3)) != 4) {
+                        echo "You are only given one of each number.\n";
+                        $input = readline();
+                    }
+                    if ($low_enough && strlen(count_chars($input, 3)) == 4) {
+                        $sanitised = true;
+                    }
+                }
+            }
+
+            $input_arr = str_split($input);
+
+            $correct = 0;
+            $half = 0;
+            $wrong = 0;
+            if ($hard) {
+                for ($i = 0; $i < count($input_arr); $i++) {
+                    // If at least right number in any place
+                    if (in_array($input_arr[$i], $combo)) {
+                        // If right place
+                        if ($input_arr[$i] == $combo[$i]) {
+                            $correct += 1;
+                        } else {
+                            $half += 1;
+                        }
+                    } else {
+                        $wrong += 1;
+                    }
+                }
+                echo "      " . green($correct) . " " . yellow($half) . " " . red($wrong);
+            } else {
+                for ($i = 0; $i < count($input_arr); $i++) {
+                    // If at least right number in any place
+                    if (in_array($input_arr[$i], $combo)) {
+                        // If right place
+                        if ($input_arr[$i] == $combo[$i]) {
+                            $correct += 1;
+                            echo green($input_arr[$i]);
+                        } else {
+                            echo yellow($input_arr[$i]);
+                        }
+                    } else {
+                        echo red($input_arr[$i]);
+                    }
+                }
+            }
+            echo "  Attempt $attempt_total";
+            // If all correct
+            if ($correct == 4 || implode($input_arr) == implode($combo)) {
+                echo cyan("\nDust falls as the ancient lock opens.");
+                sleep(2);
+                $beaten = true;
+            }
+            echo "\n";
+        }
+        if ($attempt_total == $attempt_max && ($correct == 4 || implode($input_arr) == implode($combo))) {
+            echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\n");
+        }
+    }
+
 }
 
 /** How to Render
@@ -205,7 +325,7 @@ function path_play($path, $player, $potions) {
                     door();
                     break;
                 case (yellow('*')):
-                    $player = chest($player);
+                    $player = chest($player, $path);
                     break;
                 case (green('p')):
                     $player = potion_get($player, $potions);
@@ -247,7 +367,6 @@ function path_play($path, $player, $potions) {
             }
             path_view($path);
 
-
             // check if already moving
             if (!$moving) {
                 // display stats
@@ -258,7 +377,11 @@ function path_play($path, $player, $potions) {
                         3, 2, 2, 1, 1, 0
                     ];
                     $moving = $options[array_rand($options)];
-                    echo "Moving " . ($moving + 1) . " spaces\n";
+                    if ($moving + 1 == 1) {
+                        echo 'Moving ' . ($moving + 1) . " space\n";
+                    } else {
+                        echo 'Moving ' . ($moving + 1) . " spaces\n";
+                    }
                 } elseif ($choice == 'weapons') {
                     exit('not yet implemented');
                 } elseif ($choice == 'potions') {
@@ -274,11 +397,14 @@ function path_play($path, $player, $potions) {
             $player['pos']++;
             sleep(1);
         }
-        // congrats text, print statistics
+        echo green("Congratulations! You made it through with:\n");
+        show_stats($player, true);
+        exit();
     }
     echo red("Game over!\n");
     show_stats($player, false);
 }
+
 function show_stats($player, $show_health) {
     if ($show_health) {
         echo blue('Health') . ': ';
@@ -290,29 +416,60 @@ function show_stats($player, $show_health) {
         } else {
             echo red($player['health current']);
         }
-        echo '/' . $player['health max'] . cyan(" | ");
+        echo '/' . $player['health max'] . cyan(' | ');
     }
-    echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(" | ");
+    echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(' | ');
     echo blue('Slain') . ': ' . red($player['slain']) . "\n";
 }
 
 function door_puzzle() {
+    mastermind(9, 6, false);
 }
 
 function door_branch() {
+    // this requires path gen to be fully refined, which it currently isn't
 }
 
 function door() {
     $options = [
-        "\nNarrowly avoiding a splinter, you push open the door.\n",
-        "\nThe hinges of the door squeak as it opens.\n",
-        "\nYou just manage to summon enough strength to open the door.\n"
+        "Narrowly avoiding a splinter, you push open the door.\n",
+        "The hinges of the door squeak as it opens.\n",
+        "You just manage to summon enough strength to open the door.\n"
     ];
     echo cyan($options[array_rand($options)]);
     sleep(2);
 }
 
-function chest($player) {
+function chest($player, $path) {
+    echo cyan("You come across a rusted chest.\n");
+    sleep(2);
+
+    $options = [
+        '2g', '2g', '1g', '1g', 'back', '1g back', 'back', '1g back', 'back', 'back'
+    ];
+    $outcome = $options[array_rand($options)];
+
+    if ($outcome == '2g') {
+        echo cyan('Heaving it open, you find ') . yellow("2 gold!\n");
+        $player['gold']++;
+        $player['gold']++;
+    } elseif ($outcome == '1g') {
+        echo cyan('Heaving it open, you find ') . yellow("1 gold!\n");
+        $player['gold']++;
+    } elseif ($outcome == 'back') {
+        echo cyan("Heaving it open, you find that the chest is a trap!\n");
+        sleep(2);
+        echo cyan('You narrowly avoid ') . red("certain death!\n");
+        sleep(1);
+        $path[$player['pos']+1] = yellow_faded('*');
+    } elseif ($outcome == '1g back') {
+        echo cyan("Heaving it open, you find that the chest is a trap!\n");
+        sleep(2);
+        echo cyan('You narrowly avoid ') . red('certain death!') . cyan("\nWhoever laid the trap was clumsy: you find ") . yellow("2 gold!\n");
+        sleep(1);
+        $path[$player['pos']+1] = yellow_faded('*');
+        $player['gold']++;
+    }
     return $player;
 }
 
@@ -463,7 +620,7 @@ $path = [
     '-',
     '|',
     'p',
-    '-',
+    '*',
     '1',
     '!',
     '-',
@@ -478,6 +635,7 @@ $player = [
     'health max' => 5,
     'gold' => 0,
     'slain' => 0,
+    'chest opened' => false,
     'inventory' => [
         'weapons' => [
             // name => description, skill, price
