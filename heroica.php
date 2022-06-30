@@ -143,12 +143,12 @@ function path_view($path) {
     echo "]\n";
 }
 
-function mastermind($limit, $guess_max, $hard) {
+function mastermind($limit, $attempt_max, $hard) {
     echo cyan("You come across a door with an ancient mechanism.\nYou'll need to input the correct combination of 4 numbers to proceed.\n");
     sleep(2);
-    echo cyan("There are " . $limit . " numbers to choose from, including 0.\n");
+    echo cyan("You can only use the numbers from 0-" . $limit . ", including 0 itself.\n");
     sleep(2);
-    echo cyan("Studying the mechanism, you see you'll have " . $guess_max . " attempts before the combination resets.\n");
+    echo cyan("Studying the mechanism, you see that you'll have " . $attempt_max . " attempts before the combination resets.\n");
     sleep(2);
     echo "Enter 4 numbers to input them into the mechanism.\n";
 
@@ -167,25 +167,25 @@ function mastermind($limit, $guess_max, $hard) {
             unset($remaining[array_search($rand, $remaining)]);
         }
 
-        $guess_total = 0;
+        $attempt_total = 0;
         $input_arr = [];
         $correct = 0;
-        while (($correct != 4 || implode($input_arr) != implode($combo)) && $guess_total < $guess_max) {
-            $guess_total += 1;
+        while (($correct != 4 || implode($input_arr) != implode($combo)) && $attempt_total < $attempt_max) {
+            $attempt_total += 1;
             $input = readline();
             $sanitised = false;
             while (!$sanitised) {
                 // If there are more or less than 4 characters
                 if (strlen($input) != 4) {
-                    echo "Not 4 characters.\n";
+                    echo "The ancient mechanism only has 4 spaces.\n";
                     $input = readline();
                     // If there are letters
                 } elseif (preg_match('/[a-z]/', $input)) {
-                    echo "No letters.\n";
+                    echo "Only numbers are usable to unlock this mechanism.\n";
                     $input = readline();
                     // If there are symbols
                 } elseif (preg_match('/[^\p{L}\d\s@]/u', $input)) {
-                    echo "No symbols.\n";
+                    echo "Only numbers are usable to unlock this mechanism.\n";
                     $input = readline();
                     // If there are only numbers
                 } elseif (preg_match('/[0-9]/', $input)) {
@@ -197,12 +197,12 @@ function mastermind($limit, $guess_max, $hard) {
                     }
                     // If any of the numbers are too high
                     if (!$low_enough) {
-                        echo "Lower than ".($limit+1)."\n";
+                        echo "The given numbers only go up to " . ($limit) . "!\n";
                         $input = readline();
                     }
                     // If there are duplicates
                     if (strlen(count_chars($input, 3)) != 4) {
-                        echo "No duplicates.\n";
+                        echo "You are only given one of each number.\n";
                         $input = readline();
                     }
                     if ($low_enough && strlen(count_chars($input, 3)) == 4) {
@@ -247,7 +247,7 @@ function mastermind($limit, $guess_max, $hard) {
                     }
                 }
             }
-            echo "  Guess $guess_total";
+            echo "  Attempt $attempt_total";
             // If all correct
             if ($correct == 4 || implode($input_arr) == implode($combo)) {
                 echo cyan("\nDust falls as the ancient lock opens.");
@@ -256,7 +256,7 @@ function mastermind($limit, $guess_max, $hard) {
             }
             echo "\n";
         }
-        if ($guess_total == $guess_max && ($correct == 4 || implode($input_arr) == implode($combo))) {
+        if ($attempt_total == $attempt_max && ($correct == 4 || implode($input_arr) == implode($combo))) {
             echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\n");
         }
     }
@@ -382,7 +382,6 @@ function path_play($path, $player, $potions) {
                     } else {
                         echo 'Moving ' . ($moving + 1) . " spaces\n";
                     }
-
                 } elseif ($choice == 'weapons') {
                     exit('not yet implemented');
                 } elseif ($choice == 'potions') {
@@ -424,7 +423,7 @@ function show_stats($player, $show_health) {
 }
 
 function door_puzzle() {
-    //mastermind(9, 6, false);
+    mastermind(9, 6, false);
 }
 
 function door_branch() {
@@ -433,9 +432,9 @@ function door_branch() {
 
 function door() {
     $options = [
-        "\nNarrowly avoiding a splinter, you push open the door.\n",
-        "\nThe hinges of the door squeak as it opens.\n",
-        "\nYou just manage to summon enough strength to open the door.\n"
+        "Narrowly avoiding a splinter, you push open the door.\n",
+        "The hinges of the door squeak as it opens.\n",
+        "You just manage to summon enough strength to open the door.\n"
     ];
     echo cyan($options[array_rand($options)]);
     sleep(2);
