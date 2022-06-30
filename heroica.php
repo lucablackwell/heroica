@@ -442,32 +442,35 @@ function door() {
 }
 
 function chest($player, $path) {
-    echo cyan("\nYou come across a rusted chest.\n");
-    sleep(1);
+    echo cyan("You come across a rusted chest.\n");
+    sleep(2);
 
     $options = [
-        '2g', '2g', '1g', '1g', 'back', '1g back'
+        '2g', '2g', '1g', '1g', 'back', '1g back', 'back', '1g back', 'back', 'back'
     ];
     $outcome = $options[array_rand($options)];
 
     if ($outcome == '2g') {
-        echo cyan('Heaving it open, you find ') . yellow('2 gold!');
+        echo cyan('Heaving it open, you find ') . yellow("2 gold!\n");
         $player['gold']++;
         $player['gold']++;
     } elseif ($outcome == '1g') {
-        echo cyan('Heaving it open, you find ') . yellow('1 gold!');
+        echo cyan('Heaving it open, you find ') . yellow("1 gold!\n");
         $player['gold']++;
     } elseif ($outcome == 'back') {
-        echo cyan('Heaving it open, you find that the chest is a trap! As you narrowly avoid certain death, ') . red('you move back one space.');
-        $player['pos']--;
+        echo cyan("Heaving it open, you find that the chest is a trap!\n");
+        sleep(2);
+        echo cyan('You narrowly avoid ') . red("certain death!\n");
+        sleep(1);
         $path[$player['pos']+1] = yellow_faded('*');
     } elseif ($outcome == '1g back') {
-        echo cyan('Heaving it open, you find that the chest is a trap! As you narrowly avoid certain death, ') . red('you move back one space.') . cyan("\nWhoever laid the trap was clumsy: you find ") . yellow('2 gold!');
-        $player['pos']--;
+        echo cyan("Heaving it open, you find that the chest is a trap!\n");
+        sleep(2);
+        echo cyan('You narrowly avoid ') . red('certain death!') . cyan("\nWhoever laid the trap was clumsy: you find ") . yellow("2 gold!\n");
+        sleep(1);
         $path[$player['pos']+1] = yellow_faded('*');
         $player['gold']++;
     }
-    $player['pos']--;
     return $player;
 }
 
@@ -633,6 +636,7 @@ $player = [
     'health max' => 5,
     'gold' => 0,
     'slain' => 0,
+    'chest opened' => false,
     'inventory' => [
         'weapons' => [
             // name => description, skill, price
