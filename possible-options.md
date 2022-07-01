@@ -130,3 +130,7 @@ roll key: shield, sword/3, skull/2, sword+skull/1
   * Melee: defeat the monster and take 1 gold from the store
 * Axe
   * Melee: defeat the monster and take 3 gold from the store (costs 1 health)
+
+## Enemy array
+name, strength
+'the demon' / 'the elite minotaur' / 'the goblin king'

@@ -297,8 +297,8 @@ function path_play($path, $player, $potions) {
                     $enemies = [
                         'demon', 'goblin', 'mutant'
                     ];
-                    $enemy = $enemies[array_rand($enemies)];
-                    echo red($enemy . '!');
+                    $enemy = [$enemies[array_rand($enemies)], 1, 1];
+                    echo red($enemy[0] . "!\n");
                     $player = fight($player, $enemy);
                     break;
                 case (red('2')):
@@ -379,18 +379,23 @@ function path_play($path, $player, $potions) {
     show_stats($player, false);
 }
 
+function show_health($player) {
+    echo blue('Health') . ': ';
+    $health_div = $player['health current'] / $player['health max'];
+    if ($health_div > .66) {
+        echo green($player['health current']);
+    } elseif ($health_div <= .66 && $health_div > .33) {
+        echo yellow($player['health current']);
+    } else {
+        echo red($player['health current']);
+    }
+    echo '/' . $player['health max'];
+}
+
 function show_stats($player, $show_health) {
     if ($show_health) {
-        echo blue('Health') . ': ';
-        $health_div = $player['health current'] / $player['health max'];
-        if ($health_div > .66) {
-            echo green($player['health current']);
-        } elseif ($health_div <= .66 && $health_div > .33) {
-            echo yellow($player['health current']);
-        } else {
-            echo red($player['health current']);
-        }
-        echo '/' . $player['health max'] . cyan(' | ');
+        show_health($player);
+        echo cyan(' | ');
     }
     echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(' | ');
     echo blue('Slain') . ': ' . red($player['slain']) . "\n";
@@ -487,7 +492,16 @@ function fight($player, $enemy) {
     // while enemy alive
     //  while player alive
     //  if player dies, say game over, slain by ??, stats
+    $name_cap = ucfirst($enemy[0]);
+    while ($enemy[2] != 0) {
+        while ($player['health current'] > 0) {
+            show_health($player);
+            echo cyan(' | ') . red($name_cap) . blue(' Strength') . ': ' . red($enemy[1]);
+            echo cyan(' | ') . red($name_cap) . blue(' Health') . ': ' . red($enemy[2]) . "\n";
 
+            exit;
+        }
+    }
     return $player;
 }
 
