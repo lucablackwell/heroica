@@ -270,6 +270,9 @@ function path_play($path, $player, $potions) {
     }
     while ($player['health current'] > 0) {
         while ($player['pos'] != count($path)) {
+            if ($player['health current'] == 0) {
+                break;
+            }
             // check for entities
             // need to be colour versions
             switch ($path[$player['pos']]) {
@@ -289,7 +292,14 @@ function path_play($path, $player, $potions) {
                     $player = potion_get($player, $potions);
                     break;
                 case (red('1')):
-                    $player = fight($player, 1);
+                    echo cyan('An ') . red('enemy ') . cyan("approaches!\n");
+                    echo cyan('As your fear rises, you see that your opponent is a ');
+                    $enemies = [
+                        'demon', 'goblin', 'mutant'
+                    ];
+                    $enemy = $enemies[array_rand($enemies)];
+                    echo red($enemy . '!');
+                    $player = fight($player, $enemy);
                     break;
                 case (red('2')):
                     $player = fight($player, 2);
@@ -299,6 +309,9 @@ function path_play($path, $player, $potions) {
                     break;
                 default:
                     break;
+            }
+            if ($player['health current'] == 0) {
+                break;
             }
             array_splice($path, $player['pos'], 1, blue('A'));
             if ($player['pos'] != 0) {
@@ -355,6 +368,9 @@ function path_play($path, $player, $potions) {
             $player['pos']++;
             sleep(1);
         }
+        if ($player['health current'] == 0) {
+            break;
+        }
         echo green("Congratulations! You made it through with:\n");
         show_stats($player, true);
         exit();
@@ -381,7 +397,7 @@ function show_stats($player, $show_health) {
 }
 
 function door_puzzle() {
-    mastermind(9, 6, false);
+    //mastermind(9, 6, false);
 }
 
 function door_branch() {
@@ -458,7 +474,20 @@ function potion_view($player) {
     return $player;
 }
 
-function fight($player, $strength) {
+/**
+ * introduce enemy with 1 strength, default name (demon, goblin, etc.) / 2 strength, random name / 3 strength, random name and description
+ * until enemy dead:
+     * show melee skill, weapon, health, enemy strength
+     * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
+ * show `defeated ??` with optional `for ?? gold`
+ * add 1 to 'slain' count
+ */
+
+function fight($player, $enemy) {
+    // while enemy alive
+    //  while player alive
+    //  if player dies, say game over, slain by ??, stats
+
     return $player;
 }
 
