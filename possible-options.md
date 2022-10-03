@@ -36,14 +36,14 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * show `defeated ??` with optional `for ?? gold`
    * add 1 to 'slain' count
 7. Mid Enemy - `2`
-   * introduce enemy with 2 strength, random name
+   * introduce enemy with 2 strength, 'Leader' / 'Warrior' / 'Elite'
    * until enemy dead:
      * show melee skill, weapon, health, enemy strength
      * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
    * show `defeated ??` with optional `for ?? gold`
    * add 1 to 'slain' count
 8. Top Enemy - `3`
-   * introduce enemy with 3 strength, random name and description
+   * introduce enemy with 3 strength, random name, 'Grog, The ??'
    * until enemy dead:
       * show melee skill, weapon, health, enemy strength
       * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
