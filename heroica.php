@@ -21,7 +21,7 @@ function path_gen($path_length, $entities) {
         }
         $path[] = '-';
     }
-    return explode(' ', substr(implode($path, ' '), 0, $path_length * 2));
+    return explode(' ', substr(implode($path), 0, $path_length * 2));
 }
 
 function path_return_dashes($path) {
@@ -108,11 +108,43 @@ function grey_faded($text) {
 }
 
 function path_view($path) {
-    echo '[';
+    echo '                                                                      [';
     foreach ($path as $space) {
         echo $space;
     }
     echo "]\n";
+}
+
+function num_to_word($number) {
+    $num_array = [
+        0 => 'zero',
+        1 => 'one',
+        2 => 'two',
+        3 => 'three',
+        4 => 'four',
+        5 => 'five',
+        6 => 'six',
+        7 => 'seven',
+        8 => 'eight',
+        9 => 'nine',
+        10 => 'ten',
+        11 => 'eleven',
+        12 => 'twelve',
+        13 => 'thirteen',
+        14 => 'fourteen',
+        15 => 'fifteen',
+        16 => 'sixteen',
+        17 => 'seventeen',
+        18 => 'eighteen',
+        19 => 'nineteen',
+        20 => 'twenty',
+    ];
+
+    foreach ($num_array as $num => $word) {
+        if ($number == $num) {
+            return $word;
+        }
+    }
 }
 
 function a_or_an($word) {
@@ -159,14 +191,17 @@ function enemy_generate($level) {
             }
             break;
         case (3):
+            $name = $names[array_rand($names)];
             if (array_rand([1, 1]) == 1) {
                 return [
-                    'name' => $names[array_rand($names)] . ', the ' . ucwords($statuses['pre'][array_rand($statuses['pre'])] . ' ' . $types[array_rand($types)]),
+                    'name' => $name . ', the ' . ucwords($statuses['pre'][array_rand($statuses['pre'])] . ' ' . $types[array_rand($types)]),
+                    'name_og' => ucfirst($name),
                     'level' => 3
                 ];
             } else {
                 return [
-                    'name' => $names[array_rand($names)] . ', the ' . ucwords($types[array_rand($types)] . ' ' . $statuses['post'][array_rand($statuses['post'])]),
+                    'name' => $name . ', the ' . ucwords($types[array_rand($types)] . ' ' . $statuses['post'][array_rand($statuses['post'])]),
+                    'name_og' => ucfirst($name),
                     'level' => 3
                 ];
             }
@@ -286,8 +321,8 @@ function mastermind($limit, $attempt_max, $hard) {
             }
             echo "\n";
         }
-        if ($attempt_total == $attempt_max && ($correct == 4 || implode($input_arr) == implode($combo))) {
-            echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\n");
+        if ($attempt_total == $attempt_max && ($correct != 4 || implode($input_arr) != implode($combo))) {
+            echo cyan("You took too many attempts, and the ancient lock reconfigured itself!\nTry again...\n");
         }
     }
 
@@ -356,6 +391,9 @@ function path_play($path, $player, $potions) {
                     echo cyan('As your fear rises, you see that your opponent is ' . a_or_an($enemy['name']) . ' ');
                     echo red($enemy['name'] . '!') . "\n";
                     $player = fight($player, $enemy);
+                    if ($player['pos'] != count($path)-1) {
+                        $moving = false;
+                    }
                     break;
                 case (red('2')):
                     $enemy = enemy_generate(2);
@@ -364,6 +402,9 @@ function path_play($path, $player, $potions) {
                     echo cyan('As your fear rises, you see that your opponent is ' . a_or_an($enemy['name']) . ' ');
                     echo red($enemy['name'] . '!') . "\n";
                     $player = fight($player, $enemy);
+                    if ($player['pos'] != count($path)-1) {
+                        $moving = false;
+                    }
                     break;
                 case (red('3')):
                     $enemy = enemy_generate(3);
@@ -372,6 +413,9 @@ function path_play($path, $player, $potions) {
                     echo cyan('As your fear rises, you see that your opponent is ');
                     echo red($enemy['name'] . '!') . "\n";
                     $player = fight($player, $enemy);
+                    if ($player['pos'] != count($path)-1) {
+                        $moving = false;
+                    }
                     break;
                 default:
                     break;
@@ -441,8 +485,27 @@ function path_play($path, $player, $potions) {
         show_stats($player, true);
         exit();
     }
+
     echo red("Game over!\n");
-    show_stats($player, false);
+    if ($player['gold'] > 0 && $player['slain'] > 0) {
+        if ($player['slain'] == 1) {
+            echo cyan('You drop your ' . num_to_word($player['gold']) . ' gold and join the corpse of the foe that you managed to kill before your own demise.');
+        } else {
+            echo cyan('You drop your ' . num_to_word($player['gold']) . ' gold and join the corpses of the ' . num_to_word($player['slain']) . ' foes that you managed to kill before your own demise.');
+        }
+    }
+    elseif ($player['gold'] > 0 && $player['slain'] == 0) {
+        echo cyan('You drop your ' . num_to_word($player['gold']) . ' gold and join the corpses of other naive adventurers.');
+    } elseif ($player['gold'] == 0 && $player['slain'] > 0) {
+        if ($player['slain'] == 1) {
+            echo cyan('You join the corpse of the foe that you managed to kill before your own demise.');
+        } else {
+            echo cyan('You join the corpses of the ' . num_to_word($player['slain']) . ' foes that you managed to kill before your own demise.');
+        }
+    } else {
+        echo cyan('You join the corpses of other naive adventurers.');
+    }
+    echo "\n";
 }
 
 function show_health($player) {
@@ -491,28 +554,33 @@ function chest($player, $path) {
 
     $outcome = ['2g', '2g', '1g', '1g', 'back', '1g back', 'back', '1g back', 'back', 'back'][array_rand(['2g', '2g', '1g', '1g', 'back', '1g back', 'back', '1g back', 'back', 'back'])];
 
-    if ($outcome == '2g') {
-        echo cyan('Heaving it open, you find ') . yellow("2 gold!\n");
-        $player['gold']++;
-        $player['gold']++;
-    } elseif ($outcome == '1g') {
-        echo cyan('Heaving it open, you find ') . yellow("1 gold!\n");
-        $player['gold']++;
-    } elseif ($outcome == 'back') {
-        echo cyan("Heaving it open, you find that the chest is a trap!\n");
-        sleep(2);
-        echo cyan('You narrowly avoid ') . red("certain death") . cyan(", losing 1 Health!\n");
-        sleep(1);
-        $player['health current'] -= 1;
-        $path[$player['pos']+1] = yellow_faded('*');
-    } elseif ($outcome == '1g back') {
-        echo cyan("Heaving it open, you find that the chest is a trap!\n");
-        sleep(2);
-        echo cyan('You narrowly avoid ') . red('certain death') . cyan(", losing 1 Health!\n") . cyan("\nWhoever laid the trap was clumsy: you find ") . yellow("2 gold!\n");
-        $player['health current'] -= 1;
-        sleep(1);
-        $path[$player['pos']+1] = yellow_faded('*');
-        $player['gold']++;
+    switch ($outcome) {        
+        case ('2g'):
+            echo cyan('Heaving it open, you find ') . yellow("2 gold!\n");
+            $player['gold']++;
+            $player['gold']++;
+            break;
+        case ('1g'):
+            echo cyan('Heaving it open, you find ') . yellow("1 gold!\n");
+            $player['gold']++;
+            break;
+        case ('back'):
+            echo cyan("Heaving it open, you find that the chest is a trap!\n");
+            sleep(2);
+            echo cyan('You narrowly avoid ') . red("certain death") . cyan(', ') . blue("losing 1 Health!\n");
+            sleep(1);
+            $player['health current'] -= 1;
+            $path[$player['pos']+1] = yellow_faded('*');
+            break;
+        case ('1g back') :
+            echo cyan("Heaving it open, you find that the chest is a trap!\n");
+            sleep(2);
+            echo cyan('You narrowly avoid ') . red('certain death') . cyan(', ') . blue('losing 1 Health!') . cyan("\nWhoever laid the trap was clumsy: you find ") . yellow("2 gold!\n");
+            $player['health current'] -= 1;
+            sleep(1);
+            $path[$player['pos']+1] = yellow_faded('*');
+            $player['gold']++;
+            break;
     }
     return $player;
 }
@@ -558,20 +626,34 @@ function fight($player, $enemy) {
     // while enemy alive
     //  while player alive
     //  if player dies, say game over, slain by ??, stats
-    $name_cap = ucfirst($enemy['name']); // not sure why we do this, might remove
+    //$name_cap = ucfirst($enemy['name']); // not sure why we do this, might remove
+
+    // set the enemy's health
+    $enemy['health current'] = $enemy['level'] + 1;
+    $enemy['health max'] = $enemy['level'] + 1;
+
     if ($enemy['level'] == 1 || $enemy['level'] == 2) {
-        $name_cap = 'the ' . $name_cap;
+        $enemy['name_og'] = ucwords($enemy['name']);
+        $enemy['name'] = 'the ' . $enemy['name'];
     }
-    $enemy_dead = false;
-    while (!$enemy_dead) {
-        while ($player['health current'] > 0) {
-            show_health($player);
-            //echo cyan(' | ') . red($name_cap) . blue(' Strength') . ': ' . red($enemy['level']); // can scrap, just say 'hit for 1'
-            //echo cyan(' | ') . red($name_cap) . blue(' Health') . ': ' . red($enemy['health']) . "\n";
-            
-            exit;
-        }
+
+    while ($enemy['health current'] > 0 && $player['health current'] > 0) {
+        echo blue('Your ');
+        show_health($player);
+        echo cyan(' | ') . ' ' . red($enemy['name_og'] . '\'s') . ' ';
+        show_health($enemy);
+        echo "\n";
+        //$enemy['health current'] -= 1;
+        //$player['health current'] -= 1;
     }
+    
+    //$player['health current'] = 0;
+    // One is dead
+    if ($enemy['health current'] <= 0) {
+        echo red($enemy['name_og']) . cyan(' slain!') . "\n";
+        $player['slain'] += 1;
+    }
+    $player['pos'] - 1;
     return $player;
 }
 
@@ -677,13 +759,12 @@ $path = [
 ];
 
 // Fighting test path
-$path = [
-    '-',
-    '1',
-    '2',
-    '3',
-
-];
+// $path = [
+//     '-',
+//     '3',
+//     '2',
+//     '3',
+//  ];
 
 $player = [
     'pos' => 0,
