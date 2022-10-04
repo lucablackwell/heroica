@@ -6,7 +6,7 @@
  *  generate entities (chance per one)
  *    add space after entity
  *  only level 1 and 2 enemies and regular doors for now
- *  iterate over length of array
+ *  iterate over length of arrayk
  *
  *  or just do custom designed paths?
  */
@@ -508,8 +508,12 @@ function path_play($path, $player, $potions) {
     echo "\n";
 }
 
-function show_health($player) {
-    echo blue('Health') . ': ';
+function show_health($player, $space) {
+    if ($space) {
+        echo blue('                                                           Health') . ': ';
+    } else {
+        echo blue('Health') . ': ';
+    }
     $health_div = $player['health current'] / $player['health max'];
     if ($health_div > .66) {
         echo green($player['health current']);
@@ -523,7 +527,7 @@ function show_health($player) {
 
 function show_stats($player, $show_health) {
     if ($show_health) {
-        show_health($player);
+        show_health($player, true);
         echo cyan(' | ');
     }
     echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(' | ');
@@ -531,7 +535,7 @@ function show_stats($player, $show_health) {
 }
 
 function door_puzzle() {
-    //mastermind(9, 6, false);
+    mastermind(9, 6, false);
 }
 
 function door_branch() {
@@ -552,7 +556,7 @@ function chest($player, $path) {
     echo cyan("You come across a rusted chest.\n");
     sleep(2);
 
-    $outcome = ['2g', '2g', '1g', '1g', 'back', '1g back', 'back', '1g back', 'back', 'back'][array_rand(['2g', '2g', '1g', '1g', 'back', '1g back', 'back', '1g back', 'back', 'back'])];
+    $outcome = ['2g', '2g', '1g', '1g', 'back', '1g back', 'back'][array_rand(['2g', '2g', '1g', '1g', 'back', '1g back', 'back'])];
 
     switch ($outcome) {        
         case ('2g'):
@@ -629,20 +633,50 @@ function fight($player, $enemy) {
     //$name_cap = ucfirst($enemy['name']); // not sure why we do this, might remove
 
     // set the enemy's health
-    $enemy['health current'] = $enemy['level'] + 1;
-    $enemy['health max'] = $enemy['level'] + 1;
+    // $enemy['health current'] = $enemy['level'] + 1;
+    // $enemy['health max'] = $enemy['level'] + 1;
+    $enemy['health current'] = $enemy['level'];
+    $enemy['health max'] = $enemy['level'];
 
     if ($enemy['level'] == 1 || $enemy['level'] == 2) {
         $enemy['name_og'] = ucwords($enemy['name']);
         $enemy['name'] = 'the ' . $enemy['name'];
     }
 
-    while ($enemy['health current'] > 0 && $player['health current'] > 0) {
-        echo blue('Your ');
-        show_health($player);
-        echo cyan(' | ') . ' ' . red($enemy['name_og'] . '\'s') . ' ';
-        show_health($enemy);
+    $enemy_dead = 1;
+    
+    while ($enemy_dead > 0 && $player['health current'] > 0) {
+        echo blue('                                                          Your ');
+        show_health($player, false);
+        echo cyan(' | ') . red($enemy['name_og'] . '\'s') . ' ';
+        show_health($enemy, false);
         echo "\n";
+        sleep(2);
+
+        // Calculate hits
+        $outcome = ['2hit', '1hit', '1hit', '1loss', '1loss', '1hit 1loss'][array_rand(['2hit', '1hit', '1hit', '1loss', '1loss', '1hit 1loss'])];
+        
+        switch ($outcome) {        
+            case ('2hit'): // 2 Hits
+                echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" twice!\n");
+                $enemy['health current']--;
+                $enemy['health current']--;
+                break;
+            case ('1hit'): // 1 Hit
+                echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" once!\n");
+                $enemy['health current']--;
+                break;
+            case ('1loss'): // 1 Loss
+                echo cyan('Drat! ') . red(ucfirst($enemy['name'])) . cyan(" hit you!\n");
+                $player['health current']--;
+                break;
+            case ('1hit 1loss') : // 1 Hit 1 Loss
+                echo cyan('Drat! You and ') . red($enemy['name']) . cyan(" traded blows!\n");
+                $player['health current']--;
+                $enemy['health current']--;
+                break;
+        }
+        $enemy_dead = $enemy['health current'];
         //$enemy['health current'] -= 1;
         //$player['health current'] -= 1;
     }
@@ -650,7 +684,7 @@ function fight($player, $enemy) {
     //$player['health current'] = 0;
     // One is dead
     if ($enemy['health current'] <= 0) {
-        echo red($enemy['name_og']) . cyan(' slain!') . "\n";
+        echo cyan('You killed ') . red($enemy['name']) . cyan("!\n");
         $player['slain'] += 1;
     }
     $player['pos'] - 1;
@@ -761,7 +795,7 @@ $path = [
 // Fighting test path
 // $path = [
 //     '-',
-//     '3',
+//     '1',
 //     '2',
 //     '3',
 //  ];
