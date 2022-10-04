@@ -331,6 +331,18 @@ function mastermind($limit, $attempt_max, $hard) {
 function path_play($path, $player, $potions) {
     $moving = 0;
     $path_og = $path;
+    $path_dashes = [];
+    // Add dashes
+    for ($i = 0; $i <= count($path); $i++) {
+        //var_dump($path[$i]);
+        if ($i > 0) {
+            for ($l = 0; $l <= count($path[$i]); $l++) {
+                $path[$i][$l] = '-';
+            }
+        //var_dump($path[$i-1]);
+        }
+       
+    }
     for ($i = 0; $i < count($path); $i++) {
         switch ($path[$i]) {
             case ('!'):
@@ -791,6 +803,23 @@ $path = [
     '-',
     '3'
 ];
+$path = [
+    [
+        '-',
+        '|'
+    ],[
+        'p',
+        '*',
+        '1',
+        '!'
+    ],[
+        '-',
+        '*',
+        '-',
+        '3'
+    ]
+];
+
 
 // Fighting test path
 // $path = [
