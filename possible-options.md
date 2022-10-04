@@ -36,14 +36,14 @@ roll key: shield, sword/3, skull/2, sword+skull/1
    * show `defeated ??` with optional `for ?? gold`
    * add 1 to 'slain' count
 7. Mid Enemy - `2`
-   * introduce enemy with 2 strength, random name
+   * introduce enemy with 2 strength, 'Leader' / 'Warrior' / 'Elite'
    * until enemy dead:
      * show melee skill, weapon, health, enemy strength
      * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
    * show `defeated ??` with optional `for ?? gold`
    * add 1 to 'slain' count
 8. Top Enemy - `3`
-   * introduce enemy with 3 strength, random name and description
+   * introduce enemy with 3 strength, random name, 'Grog, The ??'
    * until enemy dead:
       * show melee skill, weapon, health, enemy strength
       * roll: kill/melee skill, kill, lose as much health as strength, kill and lose health
@@ -54,8 +54,9 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 ### `?? hit you gruesomely/in a fit of rage` / `you delivered a gruesome/impactful blow to ??` 
 
 ### Shop between levels? - save stats to file
-###  Way to find health upgrades - chests, potion or certain amount of enemies killed?
+### Way to find health upgrades - chests, potion or certain amount of enemies killed?
 
+### Add 1 health for each enemy defeated? - or a kind of combo system?
 
 ## Player stats to track and display
 * Health `3/10`
@@ -119,15 +120,17 @@ roll key: shield, sword/3, skull/2, sword+skull/1
 * Faded yellow for used chests \e[0;33m
 
 ## Weapons / Skills
-* Axe
-  * Melee: defeat all adjacent monsters
-* Wand
-  * Ranged: defeat a monster up to 3 spaces away
-* Staff
-  * Ranged: restore up to 2 health
 * Bow
+  * Ranged: defeat a monster up to 3 spaces away
+* Wand
+  * Ranged: restore up to 2 health
+* Staff
   * Ranged: defeat all monsters up to 5 spaces away (costs 1 health)
-* Dagger
-  * Melee: defeat the monster and take 1 gold from the store
 * Sword
-  * Melee: defeat the monster and take 2 gold from the store (costs 1 health)
+  * Melee: defeat the monster and take 1 gold from the store
+* Axe
+  * Melee: defeat the monster and take 3 gold from the store (costs 1 health)
+
+## Enemy array
+name, strength
+'the demon' / 'the elite minotaur' / 'the goblin king'
