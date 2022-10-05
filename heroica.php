@@ -237,6 +237,7 @@ function mastermind($limit, $attempt_max, $hard) {
         $correct = 0;
         while (($correct != 4 || implode($input_arr) != implode($combo)) && $attempt_total < $attempt_max) {
             $attempt_total += 1;
+            echo '>';
             $input = readline();
             $sanitised = false;
             while (!$sanitised) {
@@ -650,17 +651,18 @@ function fight($player, $enemy) {
     while ($enemy_dead > 0 && $player['health current'] > 0) {
         sleep(2);
         $to_print = '                                                          Your ' . show_health($player, false) . cyan(' | ') . red($enemy['name_og'] . '\'s') . ' ' . show_health($enemy, false) . "\n";
-        $enemy_length =  strlen($to_print)-72; // what if health is more than 9?
         echo $to_print;
 
         // for length, add a space to string
         $player_hit = '';
-        while (strlen($player_hit) <= 69) {
+        $player_length = 69;
+        while (strlen($player_hit) <= $player_length) {
             $player_hit = $player_hit . ' ';
         }
 
         $both_hit = '';
-        while (strlen($both_hit) <= strlen(red($enemy['name_og'] . '\'s'))) {
+        $both_length = strlen(red($enemy['name_og'] . '\'s')) + (strlen($player['health current']) + strlen($player['health max']) - 2);
+        while (strlen($both_hit) <= $both_length) {
             $both_hit = $both_hit . ' ';
         }
         
@@ -676,7 +678,7 @@ function fight($player, $enemy) {
                 $enemy['health current']--;
                 break;
             case ('1hit'): // 1 Hit
-                echo red($player_hit . $both_hit . "   -2\n");
+                echo red($player_hit . $both_hit . "   -1\n");
                 echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" once!\n");
                 $enemy['health current']--;
                 break;
@@ -809,12 +811,12 @@ $path = [
 ];
 
 // Fighting test path
-$path = [
-    '-',
-    '1',
-    '2',
-    '3',
- ];
+// $path = [
+//     '-',
+//     '1',
+//     '2',
+//     '3',
+//  ];
 
 $player = [
     'pos' => 0,
