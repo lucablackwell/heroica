@@ -509,25 +509,27 @@ function path_play($path, $player, $potions) {
 }
 
 function show_health($player, $space) {
+    $to_return = '';
     if ($space) {
-        echo blue('                                                           Health') . ': ';
+        $to_return = $to_return . blue('                                                           Health') . ': ';
     } else {
-        echo blue('Health') . ': ';
+        $to_return = $to_return .  blue('Health') . ': ';
     }
     $health_div = $player['health current'] / $player['health max'];
     if ($health_div > .66) {
-        echo green($player['health current']);
+        $to_return = $to_return .  green($player['health current']);
     } elseif ($health_div <= .66 && $health_div > .33) {
-        echo yellow($player['health current']);
+        $to_return = $to_return .  yellow($player['health current']);
     } else {
-        echo red($player['health current']);
+        $to_return = $to_return .  red($player['health current']);
     }
-    echo '/' . $player['health max'];
+    $to_return = $to_return .  '/' . $player['health max'];
+    return $to_return;
 }
 
 function show_stats($player, $show_health) {
     if ($show_health) {
-        show_health($player, true);
+        echo show_health($player, true);
         echo cyan(' | ');
     }
     echo blue('Gold') . ': ' . yellow($player['gold']) . cyan(' | ');
@@ -646,31 +648,50 @@ function fight($player, $enemy) {
     $enemy_dead = 1;
     
     while ($enemy_dead > 0 && $player['health current'] > 0) {
-        echo blue('                                                          Your ');
-        show_health($player, false);
-        echo cyan(' | ') . red($enemy['name_og'] . '\'s') . ' ';
-        show_health($enemy, false);
-        echo "\n";
         sleep(2);
+        $to_print = '                                                          Your ' . show_health($player, false) . cyan(' | ') . red($enemy['name_og'] . '\'s') . ' ' . show_health($enemy, false) . "\n";
+        $enemy_length =  strlen($to_print)-72; // what if health is more than 9?
+        echo $to_print;
+
+        // for length, add a space to string
+        $enemy_hit = '';
+        while (strlen($enemy_hit) <= $enemy_length) {
+            $enemy_hit = $enemy_hit . ' ';
+        }
+
+        $player_hit = '';
+        while (strlen($player_hit) <= 69) {
+            $player_hit = $player_hit . ' ';
+        }
+
+        $both_hit = '';
+        while (strlen($both_hit) <= strlen(red($enemy['name_og'] . '\'s'))) {
+            $both_hit = $both_hit . ' ';
+        }
+        
 
         // Calculate hits
         $outcome = ['2hit', '1hit', '1hit', '1loss', '1loss', '1hit 1loss'][array_rand(['2hit', '1hit', '1hit', '1loss', '1loss', '1hit 1loss'])];
         
         switch ($outcome) {        
             case ('2hit'): // 2 Hits
+                echo $enemy_hit . red('-2') . "\n";
                 echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" twice!\n");
                 $enemy['health current']--;
                 $enemy['health current']--;
                 break;
             case ('1hit'): // 1 Hit
+                echo $enemy_hit . red('-1') . "\n";
                 echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" once!\n");
                 $enemy['health current']--;
                 break;
             case ('1loss'): // 1 Loss
+                echo $player_hit . red('-1') . "\n";
                 echo cyan('Drat! ') . red(ucfirst($enemy['name'])) . cyan(" hit you!\n");
                 $player['health current']--;
                 break;
             case ('1hit 1loss') : // 1 Hit 1 Loss
+                echo red($player_hit . '-1' . $both_hit . " -1\n");
                 echo cyan('Drat! You and ') . red($enemy['name']) . cyan(" traded blows!\n");
                 $player['health current']--;
                 $enemy['health current']--;
@@ -793,12 +814,12 @@ $path = [
 ];
 
 // Fighting test path
-// $path = [
-//     '-',
-//     '1',
-//     '2',
-//     '3',
-//  ];
+$path = [
+    '-',
+    '1',
+    '2',
+    '3',
+ ];
 
 $player = [
     'pos' => 0,
