@@ -646,7 +646,7 @@ function fight($player, $enemy) {
     }
 
     $enemy_dead = 1;
-    
+
     while ($enemy_dead > 0 && $player['health current'] > 0) {
         sleep(2);
         $to_print = '                                                          Your ' . show_health($player, false) . cyan(' | ') . red($enemy['name_og'] . '\'s') . ' ' . show_health($enemy, false) . "\n";
@@ -654,11 +654,6 @@ function fight($player, $enemy) {
         echo $to_print;
 
         // for length, add a space to string
-        $enemy_hit = '';
-        while (strlen($enemy_hit) <= $enemy_length) {
-            $enemy_hit = $enemy_hit . ' ';
-        }
-
         $player_hit = '';
         while (strlen($player_hit) <= 69) {
             $player_hit = $player_hit . ' ';
@@ -675,13 +670,13 @@ function fight($player, $enemy) {
         
         switch ($outcome) {        
             case ('2hit'): // 2 Hits
-                echo $enemy_hit . red('-2') . "\n";
+                echo red($player_hit . $both_hit . "   -2\n");
                 echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" twice!\n");
                 $enemy['health current']--;
                 $enemy['health current']--;
                 break;
             case ('1hit'): // 1 Hit
-                echo $enemy_hit . red('-1') . "\n";
+                echo red($player_hit . $both_hit . "   -2\n");
                 echo cyan('Aha! You hit ') . red($enemy['name']) . cyan(" once!\n");
                 $enemy['health current']--;
                 break;
